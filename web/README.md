@@ -1,48 +1,7 @@
-# web
+# Probelune Dashboard web module
 
-This template should help get you started developing with Vue 3 in Vite.
+This Vue/TypeScript frontend is part of the dashboard repository and is deployed with its Go backend. See the [project README](../README.md) and [architecture](../docs/ARCHITECTURE.md).
 
-## Recommended IDE Setup
+Use Node.js 26+: `npm ci`, `npm run dev` for the Vite server, `npm run lint`, and `npm run build` for type checking and production assets. Start the Go API on `127.0.0.1:8080`; Vite proxies `/api` there. Production uses the Go server to serve `dist/`.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+Vue's type checker uses the native TypeScript bridge from official create-vue's `--tsgo` integration. ESLint and Prettier are the configured source tools. No separate web repository, deployment service or application database is required.
