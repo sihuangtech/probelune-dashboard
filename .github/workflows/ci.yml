@@ -35,4 +35,4 @@ jobs:
           path: |
             dist/
             web/dist/
-      - run: docker compose config --quiet && docker build -t probelune-dashboard:ci .
+      - run: docker compose config --quiet && docker build --pull -t probelune-dashboard:ci .

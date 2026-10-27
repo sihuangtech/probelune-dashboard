@@ -1,12 +1,61 @@
 # Operations / 部署与运维
 
-## Deployment
+## Source deployment
 
-Use `docker compose up -d --build`, or `scripts/build.sh` followed by the server executable. The server reads `--data`, `--web`, `--listen`; `--backup NEW_DIRECTORY` creates a snapshot and exits. Example service and Caddy configuration are in `deploy/`.
+On Linux or macOS, install Go 1.27.3 and Node.js 26.12.1, then run:
+
+```sh
+git clone https://github.com/sihuangtech/probelune-dashboard.git
+cd probelune-dashboard
+./scripts/build.sh
+./dist/probelune-dashboard --listen 127.0.0.1:8080 --data ./data --web ./dist/web
+```
+
+Keep the process running. In a second terminal in the same repository, run `cat ./data/setup-token`. Visit `http://localhost:8080`, enter this token and create the first administrator. Stop with Ctrl-C; repeat the executable command to restart on the same data. Use absolute `--data` and `--web` paths when launching from another working directory.
+
+The build produces a CGO-free server executable and the `dist/web/` assets. The running process creates its SQLite database and encryption key inside the data directory. The server reads `--data`, `--web`, `--listen`; `--backup NEW_DIRECTORY` creates a snapshot and exits.
+
+## Linux service with systemd
+
+On a Debian/Ubuntu host with systemd, build using the steps above or copy the matching Linux executable and web assets from your build machine. To cross-build from macOS, use `GOOS=linux GOARCH=amd64 ./scripts/build.sh`, or `arm64` for an ARM server. Run these installation commands on the Linux host from the project directory:
+
+```sh
+sudo useradd --system --user-group --home-dir /var/lib/probelune --shell /usr/sbin/nologin probelune
+sudo install -m 755 dist/probelune-dashboard /usr/local/bin/probelune-dashboard
+sudo install -d -m 755 /opt/probelune/web
+sudo cp -R dist/web/. /opt/probelune/web/
+sudo install -m 644 deploy/probelune-dashboard.service /etc/systemd/system/probelune-dashboard.service
+sudoedit /etc/systemd/system/probelune-dashboard.service
+```
+
+Set the unit's `PROBELUNE_PUBLIC_URL` to the URL you actually use, for example `https://monitor.example.com`. A local-only trial can use `http://localhost:8080`. Then start the service:
+
+```sh
+sudo systemctl daemon-reload
+sudo systemctl enable --now probelune-dashboard
+sudo systemctl status probelune-dashboard
+sudo cat /var/lib/probelune/setup-token
+```
+
+The unit creates a private `/var/lib/probelune` directory owned by its service user, restarts after failures and starts after reboot. After configuring the reverse proxy below, open your instance URL and initialize the administrator. Logs: `sudo journalctl -u probelune-dashboard -n 50`. For a program update, back up first, stop the service, replace the executable and web assets, then start the service on its existing data directory.
+
+## Docker Compose
+
+```sh
+docker compose build --pull
+docker compose up -d
+docker compose exec dashboard cat /data/setup-token
+```
+
+Open `http://localhost:8080` and initialize the administrator with the token. The Dockerfiles specify verified stable patch versions; see [Dependencies](DEPENDENCIES.md). `--pull` refreshes those base images. For an update that also refreshes Alpine packages, run `docker compose build --pull --no-cache` before `docker compose up -d`.
+
+Compose runs UID 65532 with a read-only root filesystem, writable data volume and `/tmp`. Bind-mounted directories must be writable by UID 65532. One server process owns one SQLite database; this release does not support multiple writer replicas or network-filesystem database volumes.
+
+## HTTPS and public URL
 
 Set `PROBELUNE_PUBLIC_URL=https://monitor.example.com` in the service/Compose environment, and set the same URL under Settings. The environment controls trusted browser Origin and Secure cookies behind an HTTPS proxy; the saved setting controls notification links. Mount a persistent data volume, keep the server behind the proxy and forward the original Host header. Serve at the origin root, not a URL subdirectory. `/healthz` is unauthenticated and reveals only health/version. Never publish the data directory as web content.
 
-Compose runs UID 65532 with a read-only root filesystem, writable data volume and `/tmp`. Bind-mounted directories must be writable by UID 65532. One server process owns one SQLite database; this release does not support multiple writer replicas or network-filesystem database volumes.
+An example Caddy configuration is in `deploy/Caddyfile.example`. The systemd unit and Compose service both listen on loopback at port 8080 for this proxy.
 
 初始化令牌保存在私有数据目录的 `setup-token`，只供首次管理员创建使用。初始化后无需保留在浏览器或配置文件。管理员创建成员，角色为 admin、operator、viewer。客户端 HTTP 仅用于明确允许的受控开发网络，正式部署使用 HTTPS。私有 CA 可以通过主机受信任根证书配置接入，不能关闭全局 TLS 校验。
 
