@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/dist
+**/.eslintcache
+**/*.tsbuildinfo
+server/server
+server/data
+data
+backups
+.env
+*.log

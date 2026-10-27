@@ -1,0 +1,13 @@
+.DS_Store
+.idea/
+.env
+*.log
+/server/server
+/server/data/
+/data/
+/backups/
+/dist/
+/web/node_modules/
+/web/dist/
+/web/.eslintcache
+*.tsbuildinfo

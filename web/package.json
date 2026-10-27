@@ -1,0 +1,49 @@
+{
+  "name": "probelune-dashboard-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build",
+    "lint": "run-s \"lint:*\"",
+    "lint:eslint": "eslint . --fix --cache",
+    "format": "prettier --write --experimental-cli src/"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "echarts": "^6.1.0",
+    "element-plus": "^2.14.7",
+    "qrcode": "^1.5.4",
+    "vue": "^3.5.44",
+    "vue-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.5",
+    "@types/node": "^26.6.5",
+    "@types/qrcode": "^1.5.6",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "~10.12.0",
+    "jiti": "^2.7.0",
+    "npm-run-all2": "^9.0.4",
+    "prettier": "3.9.10",
+    "typescript": "npm:typescript-native-bridge@^6.0.3-bridge.19.tsgo.7.0.2",
+    "vite": "^8.3.5",
+    "vite-plugin-vue-devtools": "^8.2.1",
+    "vue-eslint-parser": "^10.4.1",
+    "vue-tsc": "^3.3.13"
+  },
+  "engines": {
+    "node": "^22.18.0 || >=24.12.0"
+  },
+  "overrides": {
+    "typescript": "$typescript"
+  }
+}

@@ -1,0 +1,138 @@
+@keyframes enter {
+  from {
+    opacity: 0.2;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-content {
+    animation: none;
+  }
+}
+@media (max-width: 1000px) {
+  .sidebar {
+    width: 176px;
+    padding: 28px 12px;
+  }
+  .content-shell {
+    margin-left: 176px;
+    width: calc(100% - 176px);
+  }
+  .page-content {
+    padding: 24px;
+  }
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .login-story {
+    padding: 40px;
+  }
+  .login-story h1 {
+    font-size: 36px;
+  }
+}
+@media (max-width: 700px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: auto;
+    padding: 12px;
+    display: block;
+  }
+  .sidebar .brand,
+  .sidebar-bottom,
+  .nav-caption {
+    display: none;
+  }
+  .sidebar nav {
+    display: flex;
+    overflow: auto;
+    gap: 3px;
+  }
+  .sidebar nav a {
+    flex-shrink: 0;
+    padding: 8px;
+    font-size: 11px;
+    gap: 5px;
+  }
+  .sidebar nav a .el-icon {
+    display: none;
+  }
+  .workspace {
+    display: block;
+  }
+  .content-shell {
+    width: 100%;
+    margin: 0;
+  }
+  .topbar {
+    height: 55px;
+    padding: 0 18px;
+  }
+  .topbar .eyebrow {
+    display: none;
+  }
+  .page-content {
+    padding: 22px 16px;
+  }
+  .page-title {
+    align-items: flex-start;
+  }
+  .page-title h1 {
+    font-size: 27px;
+  }
+  .panel {
+    padding: 16px;
+  }
+  .grid-two {
+    grid-template-columns: 1fr;
+  }
+  .account .role-label {
+    display: none;
+  }
+  .stat-grid {
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 16px;
+  }
+  .stat-card .value {
+    font-size: 27px;
+  }
+  .matrix {
+    display: none;
+  }
+  .login-layout {
+    display: block;
+  }
+  .login-story {
+    min-height: 250px;
+    padding: 80px 28px 20px;
+  }
+  .login-story .brand {
+    top: 25px;
+  }
+  .login-story h1 {
+    font-size: 28px;
+    margin: 12px 0;
+  }
+  .orbital-map {
+    display: none;
+  }
+  .login-form {
+    padding: 30px 25px;
+  }
+  .mobile-only {
+    display: block;
+  }
+}
+@media (min-width: 701px) {
+  .mobile-only {
+    display: none;
+  }
+}

@@ -1,0 +1,22 @@
+[Unit]
+Description=Probelune monitoring dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=probelune
+Group=probelune
+StateDirectory=probelune
+Environment=PROBELUNE_PUBLIC_URL=https://monitor.example.com
+ExecStart=/usr/local/bin/probelune-dashboard --listen 127.0.0.1:8080 --data /var/lib/probelune --web /opt/probelune/web
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

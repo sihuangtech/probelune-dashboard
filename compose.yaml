@@ -1,0 +1,17 @@
+services:
+  dashboard:
+    build: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      PROBELUNE_PUBLIC_URL: ${PROBELUNE_PUBLIC_URL:-http://localhost:8080}
+    volumes:
+      - dashboard-data:/data
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: [/tmp]
+    stop_grace_period: 15s
+volumes:
+  dashboard-data:
