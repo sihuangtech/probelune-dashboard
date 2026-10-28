@@ -4,7 +4,7 @@
 
 巡汐 Probelune 是自托管的多位置服务监测与网络诊断面板，用于集中查看自建节点的监测结果、管理告警，并从网页发起跨位置诊断。
 
-## 已实现能力
+## 功能
 
 - HTTP/HTTPS、TCP、ICMP、DNS 持续监测，显式选择节点，分组、标签、搜索、复制、暂停、归档及配置版本。
 - 多位置矩阵、可用率与覆盖率、错误证据、网络耗时、证书有效期、长期聚合历史。
@@ -74,7 +74,6 @@ Dockerfile 使用当前已核对的稳定补丁版本：Node.js **26.12.1**、Go
 - [安全报告](SECURITY.md)
 
 验证命令：网页 `npm run lint && npm run build`；后端在 `GOWORK=off` 下执行 `go vet ./...`、`go test ./...` 和 `go build ./cmd/server`。采用 [GPL-3.0-or-later](LICENSE) 开源。
-
 
 ## 星标历史
 
