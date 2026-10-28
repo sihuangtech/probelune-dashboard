@@ -83,7 +83,6 @@ Checks: `cd web && npm run lint && npm run build`; `cd server && GOWORK=off go v
 
 GPL-3.0-or-later; see [LICENSE](LICENSE). Review the validation record before relying on a particular operating system, push provider or production workload.
 
-
 ## Star History
 
 [![Star history](https://api.star-history.com/svg?repos=sihuangtech/probelune-dashboard&type=Date)](https://star-history.com/#sihuangtech/probelune-dashboard&Date)
