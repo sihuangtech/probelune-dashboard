@@ -69,7 +69,7 @@ Dockerfile 使用当前已核对的稳定补丁版本：Node.js **26.12.1**、Go
 - [依赖记录](docs/DEPENDENCIES.md)：核对过的版本与更新方式。
 - [API 文档](https://github.com/sihuangtech/probelune-contracts/tree/main/docs)：HTTP 接口与节点协议。
 - [验收记录](https://github.com/sihuangtech/probelune/blob/main/docs/acceptance.md)：已验证结果及环境边界。
-- [更新记录](CHANGELOG.md)
+- [发布记录](https://github.com/sihuangtech/probelune-dashboard/releases)
 - [贡献指南](CONTRIBUTING.md)
 - [安全报告](SECURITY.md)
 

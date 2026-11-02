@@ -75,7 +75,7 @@ For live web development, run the Go server on port 8080, then run `npm ci` and 
 - [Dependencies](docs/DEPENDENCIES.md): verified versions and update policy.
 - [API](https://github.com/sihuangtech/probelune-contracts/tree/main/docs): HTTP endpoints and node protocol.
 - [Acceptance](https://github.com/sihuangtech/probelune/blob/main/docs/acceptance.md): observed results and remaining deployment checks.
-- [Changelog](CHANGELOG.md)
+- [Releases](https://github.com/sihuangtech/probelune-dashboard/releases)
 - [Contributing](CONTRIBUTING.md)
 - [Security](SECURITY.md)
 

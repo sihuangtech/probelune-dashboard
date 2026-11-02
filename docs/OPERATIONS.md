@@ -77,7 +77,7 @@ Restore to the same panel URL to preserve node identity binding. For a different
 
 ## Upgrade / rollback
 
-Read the changelog and contract version, create a backup, stop the old process, fetch the desired release, rebuild/pull its image and start on the existing volume. Do not run `docker compose down -v` during upgrades. The current schema is version 1. For a future incompatible migration, rollback means restoring both the prior program and its matching database/key backup. A copied database from a newer schema is not a supported downgrade route.
+Read the [release notes](https://github.com/sihuangtech/probelune-dashboard/releases) and contract version, create a backup, stop the old process, fetch the desired release, rebuild/pull its image and start on the existing volume. Do not run `docker compose down -v` during upgrades. The current schema is version 1. For a future incompatible migration, rollback means restoring both the prior program and its matching database/key backup. A copied database from a newer schema is not a supported downgrade route.
 
 ## Data semantics and retention
 
