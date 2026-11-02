@@ -16,7 +16,7 @@ server/
 deploy/ scripts/ docs/
 ```
 
-The backend owns all state and authorization; clients do not infer alert transitions independently. Contracts are imported from `github.com/sihuangtech/probelune-contracts` at the exact Go pseudo-version recorded in `server/go.mod`; the pinned commit retains certificate-lifetime assertions without requiring a retired tag. Normal builds have no `replace` directive or dependency on adjacent checkouts. API prefix: `/api/v1`; node identity headers are separate from user sessions.
+The backend owns all state and authorization; clients do not infer alert transitions independently. Contracts are imported from `github.com/sihuangtech/probelune-contracts` at the short compatibility tag `v0.1.0-compat` recorded in `server/go.mod`; it retains certificate-lifetime assertions without moving the original `v0.1.0` tag. Normal builds have no `replace` directive or dependency on adjacent checkouts. API prefix: `/api/v1`; node identity headers are separate from user sessions.
 
 The Vue web app and Go server are built from this repository. Production builds place the executable and web assets in `dist/`; the server serves the web assets and API from one address.
 
