@@ -3,6 +3,7 @@ export const language = ref(
   localStorage.getItem('probelune-language') || (navigator.language.startsWith('zh') ? 'zh' : 'en'),
 )
 const messages: Record<string, [string, string]> = {
+  historyUnavailable: ['历史暂不可用', 'History unavailable'],
   serverHealth: ['服务器状态', 'Server health'],
   otherTargets: ['其他监测目标', 'Other monitored targets'],
   panelHealth: ['面板状态', 'Panel health'],

@@ -2,13 +2,21 @@
 import type { UptimeCell, UptimeSeries } from '../../lib/models'
 import { date, number } from '../../lib/api'
 import { t } from '../../lib/i18n'
-defineProps<{ series: UptimeSeries; label?: string }>()
+defineProps<{ series: UptimeSeries; label?: string; compact?: boolean }>()
 const emit = defineEmits<{ select: [cell: UptimeCell] }>()
 const description = (cell: UptimeCell) =>
   `${date(cell.at)} – ${date(cell.end)}\n${t('uptime_' + cell.status)}\n${t('availability')}: ${number(cell.availability, '%')} / ${t('coverage')}: ${number(cell.coverage, '%')}\n${t('success')}: ${cell.success}, ${t('failure')}: ${cell.failed}, ${t('error')}: ${cell.errors}`
 </script>
 <template>
-  <div class="uptime-history">
+  <div v-if="compact" class="preview">
+    <span
+      v-for="cell in series.cells.slice(-24)"
+      :key="cell.at"
+      :class="cell.status"
+      :title="description(cell)"
+    />
+  </div>
+  <div v-else class="uptime-history">
     <div class="uptime-stats">
       <span
         >{{ t('availability') }} <strong>{{ number(series.availability, '%') }}</strong></span
@@ -39,6 +47,17 @@ const description = (cell: UptimeCell) =>
   </div>
 </template>
 <style scoped>
+.preview {
+  display: flex;
+  gap: 2px;
+  margin: 6px 0;
+  max-width: 240px;
+}
+.preview span {
+  flex: 1;
+  height: 12px;
+  border-radius: 2px;
+}
 .uptime-stats,
 .uptime-axis {
   display: flex;

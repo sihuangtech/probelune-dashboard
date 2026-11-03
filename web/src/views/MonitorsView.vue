@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { endpoint } from '../lib/endpoint'
-import { computed, ref } from 'vue'
+import MonitorHistoryPreview from '../features/history/MonitorHistoryPreview.vue'
+import { computed, ref, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { api, canEdit, usePolling } from '../lib/api'
 import type { Monitor, Node } from '../lib/models'
@@ -15,6 +16,13 @@ const search = ref(''),
   filter = ref(''),
   editor = ref(false),
   selected = ref<Monitor>()
+const mobileQuery = window.matchMedia('(max-width: 700px)')
+const mobile = ref(mobileQuery.matches)
+const resize = () => {
+  mobile.value = mobileQuery.matches
+}
+mobileQuery.addEventListener('change', resize)
+onUnmounted(() => mobileQuery.removeEventListener('change', resize))
 const visible = computed(() =>
   data.value.filter(
     (m) =>
@@ -79,7 +87,12 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
           :label="t(status)"
       /></el-select>
     </div>
-    <el-table class="wide-monitor-table" :data="visible" :empty-text="t('noTypeMonitors')"
+    <el-table
+      v-if="!mobile"
+      row-key="id"
+      class="wide-monitor-table"
+      :data="visible"
+      :empty-text="t('noTypeMonitors')"
       ><el-table-column :label="t('name')" min-width="200"
         ><template #default="{ row }"
           ><router-link :to="'/monitors/' + row.id"
@@ -93,8 +106,8 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
         ><template #default="{ row }"
           ><HealthPill :status="row.status" /><small v-if="!row.coverage_complete">
             {{ t('incomplete') }}</small
-          ></template
-        ></el-table-column
+          >
+          <MonitorHistoryPreview :key="row.id" :monitor-id="row.id" /></template></el-table-column
       ><el-table-column prop="group" :label="t('group')" /><el-table-column
         :label="t('interval')"
         width="120"
@@ -114,13 +127,14 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
         ></el-table-column
       ></el-table
     >
-    <div class="compact-monitor-list">
+    <div v-else class="compact-monitor-list">
       <article v-for="m in visible" :key="m.id">
         <div class="section-title">
           <router-link :to="'/monitors/' + m.id"
             ><strong>{{ m.name }}</strong></router-link
           ><HealthPill :status="m.status" />
         </div>
+        <MonitorHistoryPreview :monitor-id="m.id" />
         <p>{{ m.group }} · {{ endpoint(m.check) }}</p>
         <div v-if="canEdit" class="actions">
           <el-button size="small" @click="edit(m)">{{ t('edit') }}</el-button
