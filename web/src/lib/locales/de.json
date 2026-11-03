@@ -355,5 +355,6 @@
   "backend9f3c972389": "Die Anfrage kommt zu häufig. Bitte versuchen Sie es später noch einmal.",
   "backend3d9eb0ede3": "Bitte wählen Sie 1–20 Knoten aus",
   "backend881d75694c": "Knoten existiert nicht",
-  "backendeaa1941b80": "HTTP-Assertion oder Anforderungsheader ist zu groß"
+  "backendeaa1941b80": "HTTP-Assertion oder Anforderungsheader ist zu groß",
+  "auditAction": "Aktion"
 }

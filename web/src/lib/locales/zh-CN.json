@@ -355,5 +355,6 @@
   "backend9f3c972389": "请求过于频繁，请稍后重试",
   "backend3d9eb0ede3": "请选择 1—20 个节点",
   "backend881d75694c": "节点不存在",
-  "backendeaa1941b80": "HTTP 断言或请求头过大"
+  "backendeaa1941b80": "HTTP 断言或请求头过大",
+  "auditAction": "操作"
 }

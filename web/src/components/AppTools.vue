@@ -7,20 +7,26 @@ import { theme } from '../lib/theme'
 
 <template>
   <div class="app-tools">
-    <select
-      class="language-toggle"
-      v-model="languagePreference"
-      :aria-label="t('language')"
-      :title="t('language')"
+    <label
+      ><span>{{ t('language') }}</span
+      ><select
+        class="language-toggle"
+        v-model="languagePreference"
+        :aria-label="t('language')"
+        :title="t('language')"
+      >
+        <option value="system">{{ t('systemLanguage') }}</option>
+        <option v-for="(name, tag) in languageNames" :key="tag" :value="tag">{{ name }}</option>
+      </select></label
     >
-      <option value="system">{{ t('systemLanguage') }}</option>
-      <option v-for="(name, tag) in languageNames" :key="tag" :value="tag">{{ name }}</option>
-    </select>
-    <select v-model="theme" class="theme-toggle" :aria-label="t('theme')" :title="t('theme')">
-      <option v-for="mode in ['light', 'dark', 'system']" :key="mode" :value="mode">
-        {{ t('theme' + mode[0]!.toUpperCase() + mode.slice(1)) }}
-      </option>
-    </select>
+    <label
+      ><span>{{ t('theme') }}</span
+      ><select v-model="theme" class="theme-toggle" :aria-label="t('theme')" :title="t('theme')">
+        <option v-for="mode in ['light', 'dark', 'system']" :key="mode" :value="mode">
+          {{ t('theme' + mode[0]!.toUpperCase() + mode.slice(1)) }}
+        </option>
+      </select></label
+    >
     <a
       class="github-link"
       href="https://github.com/sihuangtech/probelune-dashboard"
@@ -33,3 +39,17 @@ import { theme } from '../lib/theme'
     </a>
   </div>
 </template>
+
+<style scoped>
+label {
+  min-width: 0;
+}
+label span {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+.github-link {
+  align-self: end;
+}
+</style>

@@ -355,5 +355,6 @@
   "backend9f3c972389": "La solicitud es demasiado frecuente, inténtelo nuevamente más tarde.",
   "backend3d9eb0ede3": "Por favor seleccione 1-20 nodos",
   "backend881d75694c": "El nodo no existe",
-  "backendeaa1941b80": "El encabezado de solicitud o aserción HTTP es demasiado grande"
+  "backendeaa1941b80": "El encabezado de solicitud o aserción HTTP es demasiado grande",
+  "auditAction": "Acción"
 }
