@@ -175,6 +175,8 @@ const events = computed(() =>
   background: #e1f1e9;
   color: #08694f;
 }
+:global(html.dark .public-status .status-summary) { background: #263a40; color: var(--ink); }
+:global(html.dark .public-status .status-summary.operational) { background: #163c34; color: #88e4bf; }
 .status-summary small {
   margin-left: auto;
 }

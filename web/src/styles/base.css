@@ -341,22 +341,19 @@ html.dark {
   --el-text-color-regular: #c2d3cf;
   --el-border-color: #35464b;
 }
-html.dark .stat-card.primary {
-  background: #163c34;
-}
-html.dark .health-pill {
-  background: #263a40;
-}
-html.dark .health-pill.healthy {
-  background: #164b3c;
-  color: #88e4bf;
-}
-html.dark .health-pill.down,
-html.dark .health-pill.failed {
-  background: #542e32;
-  color: #ffb3b0;
-}
+html.dark .stat-card .value { color: var(--ink); }
+html.dark .stat-card.primary { background: #163c34; border-color: #315c50; }
+html.dark .stat-card.primary .value { color: #88e4bf; }
+html.dark .health-pill, html.dark .node-tags span { background: #263a40; color: #c5d6d8; }
+html.dark .health-pill:is(.healthy,.online,.success,.sent) { background: #164b3c; color: #88e4bf; }
+html.dark .health-pill:is(.down,.failed,.failure,.error) { background: #542e32; color: #ffb3b0; }
+html.dark .health-pill:is(.partial,.pending,.offline) { background: #493b25; color: #f5d394; }
+html.dark .health-pill.running { background: #243d58; color: #b7d8ff; }
 html.dark .el-table {
+  --el-table-bg-color: var(--surface);
+  --el-table-tr-bg-color: var(--surface);
   --el-table-header-bg-color: #20353b;
   --el-table-row-hover-bg-color: #233e43;
+  --el-table-border-color: var(--line);
 }
+html.dark .el-button--primary:not(.is-plain,.is-text,.is-link) { --el-button-text-color: #102229; --el-button-hover-text-color: #102229; }
