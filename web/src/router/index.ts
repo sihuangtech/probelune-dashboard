@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { path: '/privacy/:locale(en|zh)?', component: () => import('../views/PrivacyView.vue') },
     { path: '/', component: () => import('../views/OverviewView.vue') },
     { path: '/monitors', component: () => import('../views/MonitorsView.vue') },
     { path: '/monitors/:id', component: () => import('../views/MonitorDetail.vue') },

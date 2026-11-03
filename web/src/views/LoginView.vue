@@ -66,6 +66,9 @@ async function submit() {
             >{{ t(initialized ? 'login' : 'setup') }}</el-button
           ></el-form
         >
+        <p class="muted" style="margin-top: 24px">
+          <router-link to="/privacy">{{ t('privacyPolicy') }}</router-link>
+        </p>
       </section>
     </div>
   </div>

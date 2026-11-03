@@ -356,5 +356,6 @@
   "backend3d9eb0ede3": "请选择 1—20 个节点",
   "backend881d75694c": "节点不存在",
   "backendeaa1941b80": "HTTP 断言或请求头过大",
-  "auditAction": "操作"
+  "auditAction": "操作",
+  "privacyPolicy": "隐私政策"
 }

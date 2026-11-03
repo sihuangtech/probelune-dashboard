@@ -55,7 +55,7 @@ watch(user, async (current) => {
 
 <template>
   <el-config-provider :locale="uiLocale">
-    <router-view v-if="route.path === '/status'" />
+    <router-view v-if="route.path === '/status' || route.path.startsWith('/privacy')" />
     <div v-else-if="!ready" class="entry-layout">
       <header class="entry-tools"><AppTools /></header>
       <div class="boot-screen">

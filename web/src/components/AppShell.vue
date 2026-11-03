@@ -66,7 +66,10 @@ async function logout() {
         </div>
       </header>
       <main class="page-content"><router-view /></main>
-      <footer>{{ t('appName') }} - {{ t('tagline') }}</footer>
+      <footer>
+        {{ t('appName') }} - {{ t('tagline') }} |
+        <router-link to="/privacy">{{ t('privacyPolicy') }}</router-link>
+      </footer>
     </div>
   </div>
 </template>

@@ -356,5 +356,6 @@
   "backend3d9eb0ede3": "Please select 1-20 nodes",
   "backend881d75694c": "Node does not exist",
   "backendeaa1941b80": "HTTP assertion or request header is too large",
-  "auditAction": "Action"
+  "auditAction": "Action",
+  "privacyPolicy": "Privacy Policy"
 }
