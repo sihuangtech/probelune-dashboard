@@ -93,7 +93,7 @@ function latest(monitor: Monitor) {
       <span class="eyebrow">{{ updated ? new Date(updated).toLocaleTimeString() : '—' }}</span>
     </div>
     <el-empty v-if="!visible.length" :description="t('noTypeMonitors')" />
-    <el-table v-else :data="visible">
+    <el-table class="wide-monitor-table" v-else :data="visible">
       <el-table-column :label="t('name')" min-width="210"
         ><template #default="{ row }">
           <router-link :to="'/monitors/' + row.id"
@@ -133,6 +133,23 @@ function latest(monitor: Monitor) {
         ></el-table-column
       >
     </el-table>
+    <div class="compact-monitor-list">
+      <article v-for="m in visible" :key="m.id">
+        <div class="section-title">
+          <router-link :to="'/monitors/' + m.id"
+            ><strong>{{ m.name }}</strong></router-link
+          ><HealthPill :status="m.status" />
+        </div>
+        <p>
+          {{ m.group }} · {{ m.check.target
+          }}<template v-if="['tcp', 'udp'].includes(m.check.type)">:{{ m.check.port }}</template>
+        </p>
+        <small
+          >{{ number(latest(m)?.result?.latency_ms, ' ms') }} ·
+          {{ date(latest(m)?.last_at || 0) }}</small
+        >
+      </article>
+    </div>
   </section>
   <section class="panel">
     <div class="section-title">

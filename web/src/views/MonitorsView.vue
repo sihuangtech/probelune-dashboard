@@ -73,7 +73,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
           :label="t(status)"
       /></el-select>
     </div>
-    <el-table :data="visible" :empty-text="t('noTypeMonitors')"
+    <el-table class="wide-monitor-table" :data="visible" :empty-text="t('noTypeMonitors')"
       ><el-table-column :label="t('name')" min-width="200"
         ><template #default="{ row }"
           ><router-link :to="'/monitors/' + row.id"
@@ -111,6 +111,30 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
         ></el-table-column
       ></el-table
     >
+    <div class="compact-monitor-list">
+      <article v-for="m in visible" :key="m.id">
+        <div class="section-title">
+          <router-link :to="'/monitors/' + m.id"
+            ><strong>{{ m.name }}</strong></router-link
+          ><HealthPill :status="m.status" />
+        </div>
+        <p>
+          {{ m.group }} · {{ m.check.target
+          }}<template v-if="['tcp', 'udp'].includes(m.check.type)">:{{ m.check.port }}</template>
+        </p>
+        <div v-if="canEdit" class="actions">
+          <el-button size="small" @click="edit(m)">{{ t('edit') }}</el-button
+          ><el-button size="small" @click="edit(m, true)">{{ t('copy') }}</el-button
+          ><el-button size="small" @click="change(m, 'enabled')">{{
+            t(m.enabled ? 'pause' : 'resume')
+          }}</el-button
+          ><el-button size="small" @click="change(m, 'archived')">{{
+            t(m.archived ? 'restore' : 'archive')
+          }}</el-button>
+        </div>
+      </article>
+      <p v-if="!visible.length">{{ t('noTypeMonitors') }}</p>
+    </div>
   </div>
   <MonitorEditor
     v-model="editor"
