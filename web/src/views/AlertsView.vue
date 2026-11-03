@@ -4,7 +4,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { api, usePolling, isAdmin, canEdit, date } from '../lib/api'
 import type { Channel, Maintenance, Delivery, Monitor } from '../lib/models'
 import { t } from '../lib/i18n'
-import ChannelEditor from '../components/ChannelEditor.vue'
+import ChannelEditor from '../features/settings/ChannelEditor.vue'
 import HealthPill from '../components/HealthPill.vue'
 const { data: channels, reload: reloadChannels } = usePolling<
   { channel: Channel; has_secret: boolean }[]

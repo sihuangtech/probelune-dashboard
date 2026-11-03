@@ -170,10 +170,7 @@ func (s *Server) poll(c *gin.Context) {
 	work := ct.Work{Assignments: []ct.Assignment{}, Jobs: []ct.Job{}, Cancelled: []string{}, ServerTime: now}
 	if n.Enabled && n.ClockSkew < 30 && n.ClockSkew > -30 {
 		for _, m := range all[ct.Monitor](s, "monitor") {
-			if m.Check.CertificateMinDays > 0 && !contains(info.Capabilities, "certificate_expiry") {
-				continue
-			}
-			if !m.Enabled || m.Archived || !contains(m.NodeIDs, n.ID) || !contains(info.Capabilities, m.Check.Type) {
+			if !m.Enabled || m.Archived || !contains(m.NodeIDs, n.ID) || !m.Check.SupportedBy(info.Capabilities) {
 				continue
 			}
 			policyJSON, _ := json.Marshal(n.Policy)

@@ -5,7 +5,7 @@ import { api, canEdit, usePolling } from '../lib/api'
 import type { Monitor, Node } from '../lib/models'
 import { t } from '../lib/i18n'
 import HealthPill from '../components/HealthPill.vue'
-import MonitorEditor from '../components/MonitorEditor.vue'
+import MonitorEditor from '../features/monitors/MonitorEditor.vue'
 const { data, error, reload } = usePolling<Monitor[]>(() => '/monitors', [])
 const { data: nodes } = usePolling<Node[]>(() => '/nodes', [])
 const search = ref(''),

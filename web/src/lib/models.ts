@@ -2,6 +2,9 @@ export interface Check {
   type: string
   target: string
   port: number
+  udp_payload?: string
+  udp_encoding?: string
+  udp_expected?: string
   timeout: number
   method: string
   expected_status: number
@@ -95,6 +98,8 @@ export interface Incident {
 }
 export interface Job {
   id: string
+  batch_id?: string
+  monitor_id?: string
   node_id: string
   check: Check
   status: string
@@ -128,6 +133,7 @@ export interface Bucket {
   latency_ms: number | null
 }
 export interface History {
+  total?: number
   results: Result[]
   buckets?: Bucket[]
   bucket_seconds?: number
@@ -139,6 +145,29 @@ export interface History {
     latency_ms: number | null
   }[]
   coverage_basis: string
+}
+export interface UptimeCell {
+  at: number
+  end: number
+  status: string
+  success: number
+  failed: number
+  errors: number
+  expected: number
+  availability: number | null
+  coverage: number | null
+}
+export interface UptimeSeries {
+  from: number
+  until: number
+  bucket_seconds: number
+  cells: UptimeCell[]
+  availability: number | null
+  coverage: number | null
+}
+export interface UptimeRange {
+  hours: number
+  bucketMinutes: number
 }
 export interface Channel {
   reminder_minutes?: number

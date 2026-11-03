@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Result } from '../lib/models'
-import { date, number } from '../lib/api'
-import { t } from '../lib/i18n'
-import HealthPill from './HealthPill.vue'
+import type { Result } from '../../lib/models'
+import { date, number } from '../../lib/api'
+import { t } from '../../lib/i18n'
+import HealthPill from '../../components/HealthPill.vue'
 defineProps<{ result: Result; label?: string }>()
 </script>
 <template>

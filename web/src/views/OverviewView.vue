@@ -29,6 +29,23 @@ const { data, error, updated } = usePolling<Overview>(() => '/overview', {
     type="warning"
     :closable="false"
   />
+  <section v-if="canEdit && (!data.monitors.length || !data.online_nodes)" class="panel">
+    <h2>{{ t('setupJourney') }}</h2>
+    <p class="muted">{{ t('setupJourneyHint') }}</p>
+    <div class="actions">
+      <router-link to="/nodes"
+        ><el-button :type="!data.online_nodes ? 'primary' : 'default'"
+          >1 {{ t('connectNode') }} {{ data.online_nodes ? '✓' : '→' }}</el-button
+        ></router-link
+      ><router-link to="/monitors"
+        ><el-button :type="data.online_nodes > 0 && !data.monitors.length ? 'primary' : 'default'"
+          >2 {{ t('createMonitor') }}</el-button
+        ></router-link
+      ><router-link to="/alerts"
+        ><el-button>3 {{ t('verifyAlert') }}</el-button></router-link
+      >
+    </div>
+  </section>
   <div class="stat-grid">
     <div class="stat-card primary">
       <span class="eyebrow">{{ t('healthy') }}</span>

@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import QRCode from 'qrcode'
 import { ElMessage } from 'element-plus'
-import { api, date, usePolling } from '../lib/api'
-import { t } from '../lib/i18n'
+import { api, date, usePolling } from '../../lib/api'
+import { t } from '../../lib/i18n'
 type Session = { id: string; device: string; expires: number }
 type Device = { id: string; platform: string; created_at: number; disabled: boolean }
 const { data: sessions, reload } = usePolling<Session[]>(() => '/auth/sessions', [])

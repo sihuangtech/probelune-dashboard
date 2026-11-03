@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import type { Check } from '../lib/models'
-import { t } from '../lib/i18n'
+import type { Check } from '../../lib/models'
+import { t } from '../../lib/i18n'
+import { useCheckCatalog } from './catalog'
 const model = defineModel<Check>({ required: true })
 defineProps<{ diagnostic?: boolean }>()
+const { definitions, catalogError } = useCheckCatalog()
 </script>
 <template>
+  <el-alert v-if="catalogError" :title="catalogError" type="error" :closable="false" />
   <div class="grid-two">
     <el-form-item :label="t('type')"
       ><el-select v-model="model.type"
         ><el-option
-          v-for="kind in diagnostic
-            ? ['http', 'tcp', 'ping', 'dns', 'mtr', 'traceroute']
-            : ['http', 'tcp', 'ping', 'dns']"
-          :key="kind"
-          :value="kind"
-          :label="kind.toUpperCase()" /></el-select></el-form-item
+          v-for="kind in definitions.filter((item) => diagnostic || item.continuous)"
+          :key="kind.type"
+          :value="kind.type"
+          :label="kind.type.toUpperCase()" /></el-select></el-form-item
     ><el-form-item :label="t('timeout')"
       ><el-input-number v-model="model.timeout" :min="1" :max="60"
     /></el-form-item>
@@ -41,9 +42,22 @@ defineProps<{ diagnostic?: boolean }>()
       ><el-checkbox v-model="model.insecure_tls">{{ t('insecure') }}</el-checkbox></el-form-item
     ></template
   >
-  <el-form-item v-if="model.type === 'tcp'" :label="t('port')"
+  <el-form-item v-if="['tcp', 'udp'].includes(model.type)" :label="t('port')"
     ><el-input-number v-model="model.port" :min="1" :max="65535"
   /></el-form-item>
+  <template v-if="model.type === 'udp'">
+    <el-alert :title="t('udpHint')" type="info" :closable="false" />
+    <el-form-item :label="t('udpEncoding')"
+      ><el-select v-model="model.udp_encoding" placeholder="text"
+        ><el-option value="text" label="UTF-8" /><el-option value="hex" label="HEX" /></el-select
+    ></el-form-item>
+    <el-form-item :label="t('udpPayload')"
+      ><el-input v-model="model.udp_payload" type="textarea" :maxlength="4200"
+    /></el-form-item>
+    <el-form-item :label="t('udpExpected')"
+      ><el-input v-model="model.udp_expected" type="textarea" :maxlength="12288"
+    /></el-form-item>
+  </template>
   <template v-if="model.type === 'dns'"
     ><div class="grid-two">
       <el-form-item :label="t('record')"

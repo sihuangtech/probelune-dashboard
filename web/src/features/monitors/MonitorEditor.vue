@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { api, isAdmin, clone } from '../lib/api'
-import type { Monitor, Node, Channel } from '../lib/models'
-import { defaultMonitor } from '../lib/models'
-import { t } from '../lib/i18n'
-import CheckFields from './CheckFields.vue'
+import { api, isAdmin, clone } from '../../lib/api'
+import type { Monitor, Node, Channel } from '../../lib/models'
+import { defaultMonitor } from '../../lib/models'
+import { t } from '../../lib/i18n'
+import CheckFields from '../checks/CheckFields.vue'
+import { supportsCheck } from '../checks/catalog'
 const visible = defineModel<boolean>({ required: true })
 const props = defineProps<{ monitor?: Monitor; nodes: Node[] }>()
 const emit = defineEmits<{ saved: [] }>()
@@ -68,6 +69,8 @@ async function save() {
             v-for="node in nodes.filter((n) => !n.revoked)"
             :key="node.id"
             :value="node.id"
+            :disabled="!supportsCheck(node, model.check)"
+            :title="!supportsCheck(node, model.check) ? t('unsupportedNode') : ''"
             :label="node.name" /></el-select
       ></el-form-item>
       <div class="grid-two">

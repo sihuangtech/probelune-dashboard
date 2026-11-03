@@ -6,10 +6,11 @@
 
 ## Features
 
-- HTTP/HTTPS, TCP, ICMP and DNS monitoring with explicit node assignment, groups, tags, versioned configuration, pause and archive.
-- Location matrix, availability **and** coverage, raw evidence, certificate validity, timing and 5-minute/hourly history.
+- HTTP/HTTPS, TCP, UDP, ICMP and DNS monitoring with explicit node assignment, groups, tags, versioned configuration, pause and archive.
+- Location matrix, availability **and** coverage, raw evidence, certificate validity, timing and configurable availability history.
 - Consecutive failure/recovery confirmation; node outages remain separate from target failures.
-- One-off checks including MTR/traceroute, cancellation, and redacted JSON/CSV exports.
+- Run-based multi-location diagnostics including MTR/traceroute, cancellation, and redacted JSON/CSV exports.
+- Searchable history with time, node, result and failure-stage filters and pagination.
 - Incidents, acknowledgement, notes, timed silence, maintenance windows, SMTP and signed Webhooks with retries.
 - Admin/operator/viewer roles, encrypted credentials, one-time node registration and mobile pairing, revocable sessions, optional public status page.
 - [Desktop](https://github.com/sihuangtech/probelune-desktop) and [Flutter mobile](https://github.com/sihuangtech/probelune-mobile) clients; optional self-managed FCM delivery.
@@ -63,7 +64,19 @@ The Dockerfiles specify the verified stable patches: Node.js **26.12.1**, Go **1
 
 Both startup options bind to loopback by default. Configure an HTTPS reverse proxy for remote access using the [deployment guide](docs/OPERATIONS.md). Compose stores SQLite and encryption keys in the persistent `dashboard-data` volume; keep it when upgrading.
 
+## Availability and status page
+
+Set each monitor's check interval in seconds (15–86400, greater than its timeout). For example, `60` checks every minute; `900` checks every 15 minutes.
+
+Monitor details show availability cells, evidence and history. Enable **Settings → Public status page** and mark individual monitors public to share their summaries at `/status`.
+
+Cell duration is independent of check frequency: choose 15 minutes, hourly or a custom multiple of five minutes. The lookback and cell duration are configurable, up to 30 days and 2016 cells. Grey means no valid samples; hatching means incomplete coverage. Select a cell to inspect its counts or matching history. Availability measures successful observed checks; missing observations are tracked separately as coverage.
+
+UDP checks use UTF-8 or HEX payloads and optional response-content assertions. They require a non-empty reply; a timeout does not prove the port is closed. Select nodes that advertise UDP support.
+
 ## Development
+
+Run `. ./scripts/go-env.sh` from the repository root before manual Go commands. Build scripts, CI and containers configure the module environment automatically.
 
 For live web development, run the Go server on port 8080, then run `npm ci` and `npm run dev` from `web/` in a second terminal. Vite proxies `/api` to the backend. See the [development guide](docs/ARCHITECTURE.md#developer-loop) for the full commands.
 
@@ -92,5 +105,3 @@ GPL-3.0-or-later; see [LICENSE](LICENSE). Review the validation record before re
 - Developer: [Snake Konginchrist](https://github.com/Snake-Konginchrist)
 - Email: [developer@skstudio.cn](mailto:developer@skstudio.cn)
 - Feedback: [GitHub Issues](https://github.com/sihuangtech/probelune-dashboard/issues)
-
-For the republished contracts `v0.1.0`, run `. ./scripts/go-env.sh` from this repository root before manual Go commands. Build scripts, CI and Docker scope direct fetching and checksum-database bypass to this module; other modules retain normal verification.

@@ -27,7 +27,7 @@ export async function api<T>(
 }
 
 // 轮询避免并发重入；离开页面时解除定时器，保留最后一次成功结果。
-export function usePolling<T>(path: () => string, initial: T) {
+export function usePolling<T>(path: () => string, initial: T, interval = 3000) {
   const data = shallowRef<T>(initial)
   const error = ref('')
   const updated = ref(0)
@@ -37,22 +37,26 @@ export function usePolling<T>(path: () => string, initial: T) {
   async function reload() {
     if (loading.value || !path()) return
     loading.value = true
+    const requested = path()
     try {
-      const result = await api<T>(path())
-      if (active) {
+      const result = await api<T>(requested)
+      if (active && requested === path()) {
         data.value = result
         error.value = ''
         updated.value = Date.now()
       }
     } catch (e) {
-      if (active) error.value = String(e)
+      if (active && requested === path()) error.value = String(e)
     } finally {
       loading.value = false
+      if (active && requested !== path()) void reload()
     }
   }
   onMounted(() => {
     void reload()
-    timer = setInterval(() => void reload(), 3000)
+    timer = setInterval(() => {
+      if (!document.hidden) void reload()
+    }, interval)
   })
   onUnmounted(() => {
     active = false

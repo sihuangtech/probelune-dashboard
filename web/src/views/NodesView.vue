@@ -11,6 +11,8 @@ const open = ref(false),
   cidrs = ref(''),
   failure = ref('')
 const registration = ref<{ node: Node; registration_token: string }>()
+const installMethod = ref('binary'),
+  platform = ref('linux-amd64')
 function edit(node?: Node) {
   form.value = node ? { ...node } : { id: '', name: '', region: '', network: '', enabled: true }
   cidrs.value = node?.policy.allow_cidrs?.join('\n') || ''
@@ -56,7 +58,20 @@ function online(node: Node) {
 function instruction() {
   if (!registration.value) return ''
   const n = registration.value
-  return `export PROBELUNE_REGISTER_TOKEN='${n.registration_token}'\n./probelune-node --panel '${location.origin}' --node-id '${n.node.id}' --data ./node-data${location.protocol === 'http:' ? ' --allow-http' : ''}\nunset PROBELUNE_REGISTER_TOKEN`
+  const args = `--panel '${location.origin}' --node-id '${n.node.id}'${location.protocol === 'http:' ? ' --allow-http' : ''}`
+  const token = `export PROBELUNE_REGISTER_TOKEN='${n.registration_token}'`
+  if (installMethod.value === 'docker')
+    return `docker build -t probelune-node:0.1.0 https://github.com/sihuangtech/probelune-node.git#v0.1.0\n${token}\ndocker run -d --name probelune-node --restart unless-stopped --cap-drop ALL --cap-add NET_RAW -e PROBELUNE_REGISTER_TOKEN -v probelune-node-data:/data probelune-node:0.1.0 ${args} --data /data\nunset PROBELUNE_REGISTER_TOKEN`
+  const binary = `probelune-node-${platform.value}`
+  return `(\nset -eu\ncurl -fLO https://github.com/sihuangtech/probelune-node/releases/download/v0.1.0/${binary}\ncurl -fLO https://github.com/sihuangtech/probelune-node/releases/download/v0.1.0/SHA256SUMS\nsha256sum --ignore-missing -c SHA256SUMS\nchmod +x ${binary}\n${token}\n./${binary} ${args} --data ./node-data\nunset PROBELUNE_REGISTER_TOKEN\n)`
+}
+async function copyCommand() {
+  try {
+    await navigator.clipboard.writeText(instruction())
+    ElMessage.success(t('copy'))
+  } catch {
+    ElMessage.error(t('copyFailed'))
+  }
 }
 </script>
 <template>
@@ -135,11 +150,35 @@ function instruction() {
     :title="t('install')"
     width="760px"
     ><el-alert :title="t('tokenOnce')" type="warning" :closable="false" />
+    <el-tabs v-model="installMethod"
+      ><el-tab-pane name="docker" :label="t('containerInstall')" /><el-tab-pane
+        name="binary"
+        :label="t('binaryInstall')"
+    /></el-tabs>
+    <el-select v-if="installMethod === 'binary'" v-model="platform"
+      ><el-option value="linux-amd64" label="Linux x86_64" /><el-option
+        value="linux-arm64"
+        label="Linux ARM64"
+    /></el-select>
     <p>
       <a href="https://github.com/sihuangtech/probelune-node" target="_blank" rel="noopener"
         >probelune-node · README / Releases ↗</a
       >
     </p>
     <pre class="code-block">{{ instruction() }}</pre>
+    <el-button @click="copyCommand">{{ t('copyCommand') }}</el-button>
+    <el-alert
+      :title="
+        data.some((n) => n.id === registration?.node.id && online(n))
+          ? t('nodeConnected')
+          : t('nodeWaiting')
+      "
+      :type="data.some((n) => n.id === registration?.node.id && online(n)) ? 'success' : 'info'"
+      :closable="false"
+      style="margin-top: 16px"
+    />
+    <router-link to="/monitors"
+      ><el-button>{{ t('monitors') }} →</el-button></router-link
+    >
   </el-dialog>
 </template>

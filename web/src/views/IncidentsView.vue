@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { api, canEdit, usePolling, date } from '../lib/api'
-import type { Incident } from '../lib/models'
+import type { Incident, Job } from '../lib/models'
 import { t } from '../lib/i18n'
 import HealthPill from '../components/HealthPill.vue'
 const route = useRoute(),
@@ -37,8 +37,11 @@ async function action(v: Incident, kind: string) {
 }
 async function recheck(v: Incident) {
   try {
-    await api('/diagnostics', 'POST', { monitor_id: v.monitor_id })
-    await router.push('/diagnostics')
+    const jobs = await api<Job[]>('/diagnostics', 'POST', { monitor_id: v.monitor_id })
+    await router.push({
+      path: '/diagnostics',
+      query: { batch_id: jobs[0]?.batch_id, monitor_id: v.monitor_id },
+    })
   } catch (e) {
     ElMessage.error(String(e))
   }

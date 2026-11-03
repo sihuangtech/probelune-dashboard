@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { api, clone } from '../lib/api'
-import type { Channel } from '../lib/models'
-import { t } from '../lib/i18n'
+import { api, clone } from '../../lib/api'
+import type { Channel } from '../../lib/models'
+import { t } from '../../lib/i18n'
 const open = defineModel<boolean>({ required: true }),
   props = defineProps<{ channel?: Channel }>(),
   emit = defineEmits<{ saved: [] }>()

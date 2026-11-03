@@ -54,6 +54,7 @@ func Open(dir string) (*Store, error) {
  CREATE TABLE IF NOT EXISTS documents(kind TEXT NOT NULL,id TEXT NOT NULL,payload BLOB NOT NULL,PRIMARY KEY(kind,id));
  CREATE TABLE IF NOT EXISTS runs(id TEXT PRIMARY KEY,monitor TEXT NOT NULL,node TEXT NOT NULL,scheduled INTEGER NOT NULL,received INTEGER NOT NULL,status TEXT NOT NULL,latency REAL,payload TEXT NOT NULL);
  CREATE INDEX IF NOT EXISTS runs_history ON runs(monitor,node,scheduled DESC);
+ CREATE INDEX IF NOT EXISTS runs_monitor_time ON runs(monitor,scheduled DESC);
  CREATE TABLE IF NOT EXISTS buckets(monitor TEXT,node TEXT,bucket INTEGER,width INTEGER,success INTEGER,failed INTEGER,errors INTEGER,latency_sum REAL,latency_count INTEGER,PRIMARY KEY(monitor,node,bucket,width));
  CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY,value TEXT);
  INSERT OR IGNORE INTO meta VALUES('schema_version','1');`)

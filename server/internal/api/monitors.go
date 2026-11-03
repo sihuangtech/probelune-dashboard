@@ -50,8 +50,8 @@ func (s *Server) saveMonitor(c *gin.Context) {
 		fail(c, 400, err.Error())
 		return
 	}
-	if !contains([]string{"http", "tcp", "ping", "dns"}, m.Check.Type) {
-		fail(c, 400, "持续监测仅支持 HTTP、TCP、ICMP、DNS")
+	if !ct.IsContinuous(m.Check.Type) {
+		fail(c, 400, "持续监测仅支持 HTTP、TCP、UDP、ICMP、DNS")
 		return
 	}
 	if m.Name == "" || len(m.Name) > 100 || len(m.NodeIDs) == 0 || len(m.NodeIDs) > 50 || m.Interval < 15 || m.Interval > 86400 || m.Interval <= m.Check.Timeout || m.FailThreshold < 1 || m.FailThreshold > 20 || m.RecoverThreshold < 1 || m.RecoverThreshold > 20 {
@@ -73,6 +73,10 @@ func (s *Server) saveMonitor(c *gin.Context) {
 			return
 		}
 		seen[id] = true
+		if (len(n.Info.Capabilities) > 0 || m.Check.Type == ct.TypeUDP) && !m.Check.SupportedBy(n.Info.Capabilities) {
+			fail(c, 400, "所选节点尚不支持此检测配置，请先升级并等待节点上线")
+			return
+		}
 	}
 	for _, id := range m.ChannelIDs {
 		var channel model.Channel
@@ -171,20 +175,4 @@ func (s *Server) overview(c *gin.Context) {
 	var cfg model.Settings
 	s.Store.Get("settings", "instance", &cfg)
 	c.JSON(200, gin.H{"instance_id": cfg.ID, "monitors": out, "summary": summary, "nodes": nodes, "online_nodes": online, "incidents": incidents, "time": Now()})
-}
-func (s *Server) publicStatus(c *gin.Context) {
-	var cfg model.Settings
-	s.Store.Get("settings", "instance", &cfg)
-	if !cfg.PublicStatus {
-		fail(c, 404, "状态页未启用")
-		return
-	}
-	list := []gin.H{}
-	for _, m := range all[ct.Monitor](s, "monitor") {
-		if m.Public && !m.Archived {
-			v := s.monitorView(m)
-			list = append(list, gin.H{"id": m.ID, "name": m.Name, "status": v["status"], "coverage_complete": v["coverage_complete"], "maintenance": v["maintenance"]})
-		}
-	}
-	c.JSON(200, gin.H{"name": cfg.Name, "monitors": list, "updated_at": Now()})
 }

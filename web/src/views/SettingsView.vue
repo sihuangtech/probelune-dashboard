@@ -4,8 +4,8 @@ import { ElMessage } from 'element-plus'
 import { api, isAdmin, usePolling, date, displayTimezone } from '../lib/api'
 import { t } from '../lib/i18n'
 import type { Settings } from '../lib/models'
-import MemberSettings from '../components/MemberSettings.vue'
-import SessionSettings from '../components/SessionSettings.vue'
+import MemberSettings from '../features/settings/MemberSettings.vue'
+import SessionSettings from '../features/settings/SessionSettings.vue'
 const form = ref<Settings>({
     name: 'Probelune',
     public_url: '',

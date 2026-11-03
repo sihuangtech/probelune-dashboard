@@ -4,7 +4,7 @@ import * as echarts from 'echarts/core'
 import { LineChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent, LegendComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
-import type { Bucket, Node } from '../lib/models'
+import type { Bucket, Node } from '../../lib/models'
 echarts.use([LineChart, GridComponent, TooltipComponent, LegendComponent, CanvasRenderer])
 const props = defineProps<{ buckets: Bucket[]; width: number; nodes: Node[] }>()
 const host = ref<HTMLElement>()

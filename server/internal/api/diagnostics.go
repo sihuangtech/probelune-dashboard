@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	ct "github.com/sihuangtech/probelune-contracts"
 	"github.com/sihuangtech/probelune-dashboard/server/internal/model"
+	"github.com/sihuangtech/probelune-dashboard/server/internal/store"
 	"sort"
 )
 
@@ -38,6 +39,7 @@ func (s *Server) createJobs(c *gin.Context) {
 		return
 	}
 	jobs := []ct.Job{}
+	batch := ID()
 	seen := map[string]bool{}
 	for _, id := range in.NodeIDs {
 		var n model.Node
@@ -46,29 +48,37 @@ func (s *Server) createJobs(c *gin.Context) {
 			return
 		}
 		seen[id] = true
-		if in.Check.CertificateMinDays > 0 && !contains(n.Info.Capabilities, "certificate_expiry") {
-			fail(c, 400, "节点需要升级以支持证书有效期断言")
-			return
-		}
-		if !contains(n.Info.Capabilities, in.Check.Type) {
+		if !in.Check.SupportedBy(n.Info.Capabilities) {
 			fail(c, 400, "节点不支持此检测类型")
 			return
 		}
-		jobs = append(jobs, ct.Job{ID: ID(), NodeID: id, Check: in.Check, Policy: n.Policy, Status: "queued", CreatedAt: Now(), Deadline: Now() + 120})
+		jobs = append(jobs, ct.Job{ID: ID(), BatchID: batch, MonitorID: in.MonitorID, NodeID: id, Check: in.Check, Policy: n.Policy, Status: "queued", CreatedAt: Now(), Deadline: Now() + 120})
 	}
+	documents := []store.Document{}
 	for _, j := range jobs {
-		if !s.save(c, "job", j.ID, j) {
-			return
-		}
-		s.audit(c, "diagnostic.create", j.ID)
+		documents = append(documents, store.Document{Kind: "job", ID: j.ID, Value: j})
 	}
+	if err := s.Store.PutMany(documents...); err != nil {
+		fail(c, 500, "诊断保存失败")
+		return
+	}
+	s.audit(c, "diagnostic.create", batch)
 	for i := range jobs {
 		jobs[i].Check.Headers = nil
 	}
 	c.JSON(201, jobs)
 }
 func (s *Server) jobs(c *gin.Context) {
-	jobs := all[ct.Job](s, "job")
+	jobs := []ct.Job{}
+	for _, j := range all[ct.Job](s, "job") {
+		if batch := c.Query("batch_id"); batch != "" && j.BatchID != batch {
+			continue
+		}
+		if monitor := c.Query("monitor_id"); monitor != "" && j.MonitorID != monitor {
+			continue
+		}
+		jobs = append(jobs, j)
+	}
 	sort.Slice(jobs, func(i, j int) bool { return jobs[i].CreatedAt > jobs[j].CreatedAt })
 	if len(jobs) > 200 {
 		jobs = jobs[:200]

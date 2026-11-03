@@ -39,3 +39,9 @@ npm run dev
 Open the URL printed by Vite. The data and initialization token are in the repository-root `data/` directory. Read `data/setup-token` from a third terminal to initialize the administrator. Official scaffolding: `npm create vue@latest` and `go mod init`; package changes use npm/go commands. Use `npm exec --yes npm-check-updates -- -u` when deliberately upgrading ranges, then `npm install`, lint and build. Do not manually edit lockfiles. The TypeScript-native bridge replaces the incompatible compiler integration without downgrading Vue or its lint tooling.
 
 Handwritten modules are kept small; generated package/lock files are not source-module size targets. Add focused tests for security or state transitions that can regress; use actual runtime checks for deployment/client integration. See the shared acceptance record for what has and has not been exercised.
+
+## Module organization
+
+The Vue router owns page composition. Shared presentation stays in `web/src/components`; domain components live in `web/src/features/checks`, `history`, `monitors` and `settings`. Check fields and node compatibility share one catalog supplied by `/api/v1/check-types`. Availability range preferences and the status strip belong to `features/history` and are shared by public status and authenticated monitor details. Network requests and wire models remain in `web/src/lib`.
+
+The contracts module owns check identifiers, continuous/diagnostic classification and required capabilities. The probe registry uses the same identifiers to dispatch executors and advertise capabilities. Transport checks share network policy resolution, pinned socket creation, deadlines and cancellation in `pkg/checks/network.go`; HTTP, DNS and route adapters keep their protocol-specific implementations.

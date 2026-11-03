@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"github.com/gin-gonic/gin"
+	ct "github.com/sihuangtech/probelune-contracts"
 	"github.com/sihuangtech/probelune-dashboard/server/internal/model"
 	"github.com/sihuangtech/probelune-dashboard/server/internal/store"
 	"log/slog"
@@ -151,9 +152,11 @@ func (s *Server) Router(web string) *gin.Engine {
 	s.authRoutes(r)
 	s.nodeRoutes(r)
 	v := r.Group("/api/v1", s.authenticate)
+	v.GET("/check-types", func(c *gin.Context) { c.JSON(200, ct.CheckDefinitions()) })
 	v.GET("/overview", s.overview)
 	v.GET("/monitors", s.monitors)
 	v.GET("/monitors/:id/history", s.history)
+	v.GET("/monitors/:id/uptime", s.uptime)
 	v.POST("/monitors", s.role("admin", "operator"), s.saveMonitor)
 	v.PUT("/monitors/:id", s.role("admin", "operator"), s.saveMonitor)
 	v.GET("/nodes", s.nodes)

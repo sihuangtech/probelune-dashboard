@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { api, usePolling, clone } from '../lib/api'
-import { t } from '../lib/i18n'
-import type { User } from '../lib/models'
+import { api, usePolling, clone } from '../../lib/api'
+import { t } from '../../lib/i18n'
+import type { User } from '../../lib/models'
 const { data: members, reload, error } = usePolling<User[]>(() => '/users', [])
 const open = ref(false),
   form = ref({ id: '', username: '', password: '', role: 'viewer', disabled: false }),

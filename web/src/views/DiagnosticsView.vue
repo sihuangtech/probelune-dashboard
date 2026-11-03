@@ -1,23 +1,52 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { api, canEdit, usePolling, download, date } from '../lib/api'
-import type { Node, Diagnostic } from '../lib/models'
+import type { Node, Diagnostic, Job } from '../lib/models'
 import { defaultCheck } from '../lib/models'
 import { t } from '../lib/i18n'
-import CheckFields from '../components/CheckFields.vue'
-import ResultCard from '../components/ResultCard.vue'
+import CheckFields from '../features/checks/CheckFields.vue'
+import { supportsCheck } from '../features/checks/catalog'
+import ResultCard from '../features/checks/ResultCard.vue'
 import HealthPill from '../components/HealthPill.vue'
 const check = ref(defaultCheck()),
   nodeIDs = ref<string[]>([]),
   busy = ref(false),
   failure = ref('')
+const route = useRoute(),
+  router = useRouter()
+const query = computed(() =>
+  new URLSearchParams(
+    Object.entries(route.query).filter(
+      ([key, value]) => ['batch_id', 'monitor_id'].includes(key) && typeof value === 'string',
+    ) as [string, string][],
+  ).toString(),
+)
 const { data: nodes } = usePolling<Node[]>(() => '/nodes', [])
-const { data: jobs, error, reload } = usePolling<Diagnostic[]>(() => '/diagnostics', [])
+const {
+  data: jobs,
+  error,
+  reload,
+} = usePolling<Diagnostic[]>(() => '/diagnostics?' + query.value, [])
+watch(query, () => void reload())
+watch(
+  () => check.value.type,
+  () => {
+    nodeIDs.value = nodeIDs.value.filter((id) => {
+      const node = nodes.value.find((n) => n.id === id)
+      return !!node && supportsCheck(node, check.value)
+    })
+  },
+)
 async function submit() {
   busy.value = true
   failure.value = ''
   try {
-    await api('/diagnostics', 'POST', { check: check.value, node_ids: nodeIDs.value })
+    const created = await api<Job[]>('/diagnostics', 'POST', {
+      check: check.value,
+      node_ids: nodeIDs.value,
+    })
+    await router.replace({ path: '/diagnostics', query: { batch_id: created[0]?.batch_id } })
     await reload()
   } catch (e) {
     failure.value = String(e)
@@ -65,8 +94,10 @@ function exportData(format: string) {
     <div>
       <p class="eyebrow">ON-DEMAND / MULTI-LOCATION</p>
       <h1>{{ t('diagnostics') }}</h1>
+      <p class="muted">{{ t('diagnosisHint') }}</p>
     </div>
     <div class="actions">
+      <el-button v-if="query" @click="router.replace('/diagnostics')">{{ t('allRuns') }}</el-button>
       <el-button @click="exportData('json')">JSON ↓</el-button
       ><el-button @click="exportData('csv')">CSV ↓</el-button>
     </div>
@@ -80,10 +111,36 @@ function exportData(format: string) {
             v-for="node in nodes.filter((n) => n.enabled && !n.revoked)"
             :key="node.id"
             :value="node.id"
+            :disabled="!supportsCheck(node, check)"
+            :title="!supportsCheck(node, check) ? t('unsupportedNode') : ''"
             :label="node.name" /></el-select></el-form-item
       ><el-button native-type="submit" type="primary" :loading="busy">{{
         t('start')
       }}</el-button></el-form
+    >
+  </div>
+  <div v-if="jobs.length" class="panel">
+    <div class="section-title">
+      <h3>{{ query ? t('batchResults') : t('history') }}</h3>
+      <router-link v-if="route.query.monitor_id" :to="'/monitors/' + route.query.monitor_id"
+        >{{ t('monitors') }} →</router-link
+      >
+    </div>
+    <el-table :data="jobs"
+      ><el-table-column :label="t('location')"
+        ><template #default="{ row }">{{
+          nodes.find((n) => n.id === row.job.node_id)?.name || row.job.node_id
+        }}</template></el-table-column
+      ><el-table-column :label="t('overview')"
+        ><template #default="{ row }"
+          ><HealthPill :status="row.result?.status || row.job.status" /></template></el-table-column
+      ><el-table-column :label="t('stage')"
+        ><template #default="{ row }">{{ row.result?.stage || '—' }}</template></el-table-column
+      ><el-table-column :label="t('latency')"
+        ><template #default="{ row }">{{
+          row.result?.latency_ms == null ? '—' : row.result.latency_ms.toFixed(1) + ' ms'
+        }}</template></el-table-column
+      ></el-table
     >
   </div>
   <div class="grid-two">

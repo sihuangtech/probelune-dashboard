@@ -11,12 +11,12 @@ type historyBucket struct {
 	Latency      *float64 `json:"latency_ms"`
 }
 
-func (s *Server) historyBuckets(monitor, node string, from, width int64) ([]historyBucket, error) {
+func (s *Server) historyBuckets(monitor, node string, from, until, width int64) ([]historyBucket, error) {
 	// 原始样本和已归档样本不重叠；相同桶合并，防止保留期边界重复计数。
 	rows, err := s.Store.DB.Query(`SELECT node,bucket,SUM(success),SUM(failed),SUM(errors),SUM(latency_sum),SUM(latency_count) FROM (
- SELECT node,scheduled/?*? AS bucket,SUM(status='success') AS success,SUM(status='failure') AS failed,SUM(status NOT IN ('success','failure')) AS errors,COALESCE(SUM(latency),0) AS latency_sum,COUNT(latency) AS latency_count FROM runs WHERE monitor=? AND scheduled>=? AND (?='' OR node=?) GROUP BY node,scheduled/?
- UNION ALL SELECT node,bucket,success,failed,errors,latency_sum,latency_count FROM buckets WHERE monitor=? AND width=? AND bucket>=? AND (?='' OR node=?)
- ) GROUP BY node,bucket ORDER BY bucket`, width, width, monitor, from, node, node, width, monitor, width, from, node, node)
+ SELECT node,scheduled/?*? AS bucket,SUM(status='success') AS success,SUM(status='failure') AS failed,SUM(status NOT IN ('success','failure')) AS errors,COALESCE(SUM(latency),0) AS latency_sum,COUNT(latency) AS latency_count FROM runs WHERE monitor=? AND scheduled>=? AND scheduled<=? AND (?='' OR node=?) GROUP BY node,scheduled/?
+ UNION ALL SELECT node,bucket,success,failed,errors,latency_sum,latency_count FROM buckets WHERE monitor=? AND width=? AND bucket>=? AND bucket<=? AND (?='' OR node=?)
+ ) GROUP BY node,bucket ORDER BY bucket`, width, width, monitor, from, until, node, node, width, monitor, width, from, until, node, node)
 	if err != nil {
 		return nil, err
 	}
