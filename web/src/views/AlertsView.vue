@@ -59,7 +59,7 @@ async function remove(id: string) {
 <template>
   <div class="page-title">
     <div>
-      <p class="eyebrow">NOTIFICATIONS & QUIET WINDOWS</p>
+      <p class="eyebrow">{{ t('alertsEyebrow') }}</p>
       <h1>{{ t('alerts') }}</h1>
     </div>
   </div>

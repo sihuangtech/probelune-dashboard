@@ -66,7 +66,7 @@ async function save() {
         ><el-input v-model="form.url" /></el-form-item
       ><template v-if="form.type === 'smtp'"
         ><div class="grid-two">
-          <el-form-item label="SMTP host"><el-input v-model="form.smtp_host" /></el-form-item
+          <el-form-item :label="t('smtpHost')"><el-input v-model="form.smtp_host" /></el-form-item
           ><el-form-item :label="t('port')"
             ><el-input-number v-model="form.smtp_port"
           /></el-form-item>
@@ -77,11 +77,11 @@ async function save() {
         ><el-form-item :label="t('username')"><el-input v-model="form.username" /></el-form-item
         ><el-form-item :label="t('password')"
           ><el-input v-model="form.password" type="password" show-password /></el-form-item
-        ><el-form-item label="From"><el-input v-model="form.from" /></el-form-item
-        ><el-form-item label="To"><el-input v-model="form.to" /></el-form-item></template
+        ><el-form-item :label="t('from')"><el-input v-model="form.from" /></el-form-item
+        ><el-form-item :label="t('to')"><el-input v-model="form.to" /></el-form-item></template
       ><el-alert
         v-if="form.type === 'push'"
-        title="FCM requires GOOGLE_APPLICATION_CREDENTIALS on the server and a registered mobile device."
+        :title="t('pushSetupHint')"
         type="info"
         :closable="false"
       /><el-form-item v-if="form.type !== 'push'" :label="t('policy')"

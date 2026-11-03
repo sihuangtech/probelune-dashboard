@@ -1,20 +1,26 @@
-# 巡汐 Probelune 面板
+# 巡汐网页面板
 
-[English](README.md) · [产品与 PRD](https://github.com/sihuangtech/probelune) · [探测节点](https://github.com/sihuangtech/probelune-node)
+[English](README.md) | [产品与 PRD](https://github.com/sihuangtech/probelune) | [探测节点](https://github.com/sihuangtech/probelune-node)
 
 巡汐 Probelune 是自托管的多位置服务监测与网络诊断面板，用于集中查看自建节点的监测结果、管理告警，并从网页发起跨位置诊断。
 
+## 界面预览
+
+![使用演示数据的监测界面](docs/images/dashboard-zh-light.png)
+
+截图使用演示数据。应用支持语言切换，以及浅色、深色和跟随系统三种主题。
+
 ## 功能
 
-- 总览清单与监测列表支持按 TCP、UDP、ICMP、HTTP/HTTPS、DNS 筛选，并提供每种探测的简短说明；页面间共享并记住类型选择，列表中可叠加名称搜索和状态筛选。
-- HTTP/HTTPS、TCP、UDP、ICMP、DNS 持续监测，显式选择节点，分组、标签、搜索、复制、暂停、归档及配置版本。
-- 目标状态清单、可用率与覆盖率、错误证据、网络耗时、证书有效期、长期聚合历史。
-- 连续失败/恢复阈值；节点离线单独提示，不冒充所有站点宕机。
-- 按批次查看 HTTP/DNS/TCP/UDP/ICMP/MTR/路由追踪即时诊断、取消及脱敏 JSON/CSV 导出。
-- 历史明细支持时间、节点、结果、失败阶段筛选及分页。
-- 事件时间线、确认、备注、限时静默、维护窗口、SMTP、签名 Webhook 及发送重试。
-- 管理员/操作员/只读成员、一次性节点注册与手机配对、会话撤销、凭据加密、公开只读状态页。
-- 接入独立桌面和移动客户端；可选配置自己的 Firebase 项目发送原生推送。
+1. 总览清单与监测列表支持按 TCP、UDP、ICMP、HTTP/HTTPS、DNS 筛选，并提供每种探测的简短说明；页面间共享并记住类型选择，列表中可叠加名称搜索和状态筛选。
+2. HTTP/HTTPS、TCP、UDP、ICMP、DNS 持续监测，显式选择节点，分组、标签、搜索、复制、暂停、归档及配置版本。
+3. 目标状态清单、可用率与覆盖率、错误证据、网络耗时、证书有效期、长期聚合历史。
+4. 连续失败/恢复阈值；节点离线单独提示，不冒充所有站点宕机。
+5. 按批次查看 HTTP/DNS/TCP/UDP/ICMP/MTR/路由追踪即时诊断、取消及脱敏 JSON/CSV 导出。
+6. 历史明细支持时间、节点、结果、失败阶段筛选及分页。
+7. 事件时间线、确认、备注、限时静默、维护窗口、SMTP、签名 Webhook 及发送重试。
+8. 管理员/操作员/只读成员、一次性节点注册与手机配对、会话撤销、凭据加密、公开只读状态页。
+9. 接入独立桌面和移动客户端；可选配置自己的 Firebase 项目发送原生推送。
 
 在需要观察的公网或内网部署探测节点，即可接入自己的面板。初版面向个人和小团队。
 
@@ -79,15 +85,15 @@ UDP 检测支持 UTF-8/HEX 请求与可选响应内容断言，必须收到非�
 
 ## 文档
 
-- [部署文档](docs/OPERATIONS.md)：宿主机服务、Docker、HTTPS、备份恢复与升级。
-- [开发文档](docs/ARCHITECTURE.md)：项目架构与本地开发。
-- [通知配置](docs/NOTIFICATIONS.md)：SMTP、Webhook 与手机推送。
-- [依赖记录](docs/DEPENDENCIES.md)：核对过的版本与更新方式。
-- [API 文档](https://github.com/sihuangtech/probelune-contracts/tree/main/docs)：HTTP 接口与节点协议。
-- [验收记录](https://github.com/sihuangtech/probelune/blob/main/docs/acceptance.md)：已验证结果及环境边界。
-- [发布记录](https://github.com/sihuangtech/probelune-dashboard/releases)
-- [贡献指南](CONTRIBUTING.md)
-- [安全报告](SECURITY.md)
+1. [部署文档](docs/OPERATIONS.md)：宿主机服务、Docker、HTTPS、备份恢复与升级。
+2. [开发文档](docs/ARCHITECTURE.md)：项目架构与本地开发。
+3. [通知配置](docs/NOTIFICATIONS.md)：SMTP、Webhook 与手机推送。
+4. [依赖记录](docs/DEPENDENCIES.md)：核对过的版本与更新方式。
+5. [API 文档](https://github.com/sihuangtech/probelune-contracts/tree/main/docs)：HTTP 接口与节点协议。
+6. [验收记录](https://github.com/sihuangtech/probelune/blob/main/docs/acceptance.md)：已验证结果及环境边界。
+7. [发布记录](https://github.com/sihuangtech/probelune-dashboard/releases)
+8. [贡献指南](CONTRIBUTING.md)
+9. [安全报告](SECURITY.md)
 
 验证命令：网页 `npm run lint && npm run build`；后端在 `GOWORK=off` 下执行 `go vet ./...`、`go test ./...` 和 `go build ./cmd/server`。采用 [GPL-3.0-or-later](LICENSE) 开源。
 
@@ -97,6 +103,8 @@ UDP 检测支持 UTF-8/HEX 请求与可选响应内容断言，必须收到非�
 
 ## 联系开发者
 
-- 开发者: [Snake Konginchrist](https://github.com/Snake-Konginchrist)
-- 邮箱: [developer@skstudio.cn](mailto:developer@skstudio.cn)
-- 问题反馈: [GitHub Issues](https://github.com/sihuangtech/probelune-dashboard/issues)
+1. 开发者: [Snake Konginchrist](https://github.com/Snake-Konginchrist)
+2. 邮箱: [developer@skstudio.cn](mailto:developer@skstudio.cn)
+3. 问题反馈: [GitHub Issues](https://github.com/sihuangtech/probelune-dashboard/issues)
+
+[本地化说明](docs/LOCALIZATION.md)

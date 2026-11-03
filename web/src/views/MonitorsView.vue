@@ -67,7 +67,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
 <template>
   <div class="page-title">
     <div>
-      <p class="eyebrow">SERVICES & ENDPOINTS</p>
+      <p class="eyebrow">{{ t('servicesEyebrow') }}</p>
       <h1>{{ t('monitors') }}</h1>
     </div>
     <el-button v-if="canEdit" type="primary" @click="edit()">+ {{ t('add') }}</el-button>
@@ -107,7 +107,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
       class="wide-monitor-table"
       :data="visible"
       :empty-text="t('noTypeMonitors')"
-      ><el-table-column :label="t('name')" min-width="200"
+      ><el-table-column :label="t('name')" min-width="180"
         ><template #default="{ row }"
           ><router-link :to="'/monitors/' + row.id"
             ><strong>{{ row.name }}</strong></router-link
@@ -126,9 +126,9 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
         <template #default="{ row }">{{ latestLatency(row) }}</template> </el-table-column
       ><el-table-column prop="group" :label="t('group')" /><el-table-column
         :label="t('interval')"
-        width="120"
+        width="100"
         ><template #default="{ row }">{{ row.interval }}s</template></el-table-column
-      ><el-table-column v-if="canEdit" width="300"
+      ><el-table-column v-if="canEdit" width="240"
         ><template #default="{ row }"
           ><div class="actions">
             <el-button size="small" @click="edit(row)">{{ t('edit') }}</el-button

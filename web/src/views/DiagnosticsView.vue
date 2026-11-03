@@ -94,7 +94,7 @@ function exportData(format: string) {
 <template>
   <div class="page-title">
     <div>
-      <p class="eyebrow">ON-DEMAND / MULTI-LOCATION</p>
+      <p class="eyebrow">{{ t('diagnosticsEyebrow') }}</p>
       <h1>{{ t('diagnostics') }}</h1>
       <p class="muted">{{ t('diagnosisHint') }}</p>
     </div>

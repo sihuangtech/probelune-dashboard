@@ -50,7 +50,7 @@ async function recheck(v: Incident) {
 <template>
   <div class="page-title">
     <div>
-      <p class="eyebrow">EVIDENCE & RESPONSE</p>
+      <p class="eyebrow">{{ t('incidentsEyebrow') }}</p>
       <h1>{{ t('incidents') }}</h1>
     </div>
   </div>

@@ -79,7 +79,7 @@
 }
 .topbar {
   height: 76px;
-  background: #fafcf9;
+  background: var(--surface);
   border-bottom: 1px solid var(--line);
   padding: 0 34px;
   display: flex;
@@ -126,7 +126,7 @@
   margin-bottom: 26px;
 }
 .stat-card {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 21px;
@@ -191,7 +191,7 @@
   padding: 22px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--surface);
 }
 .node-card h3 {
   margin: 0;

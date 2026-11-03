@@ -79,7 +79,7 @@ async function copyCommand() {
 <template>
   <div class="page-title">
     <div>
-      <p class="eyebrow">SERVERS</p>
+      <p class="eyebrow">{{ t('serversEyebrow') }}</p>
       <h1>{{ t('nodes') }}</h1>
       <p class="muted">{{ t('nodeHint') }}</p>
     </div>

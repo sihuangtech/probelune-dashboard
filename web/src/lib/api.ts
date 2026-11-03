@@ -1,3 +1,4 @@
+import { language, translateServerError } from './i18n'
 import { ref, shallowRef, computed, onMounted, onUnmounted } from 'vue'
 import type { User } from './models'
 
@@ -21,7 +22,7 @@ export async function api<T>(
   if (response.status === 401) user.value = null
   if (!response.ok) {
     const data = await response.json().catch(() => ({ error: `HTTP ${response.status}` }))
-    throw new Error(data.error || `HTTP ${response.status}`)
+    throw new Error(translateServerError(data.error || `HTTP ${response.status}`))
   }
   return response.status === 204 ? (undefined as T) : ((await response.json()) as T)
 }
@@ -66,11 +67,13 @@ export function usePolling<T>(path: () => string, initial: T, interval = 3000) {
 }
 export const date = (value?: number) =>
   value
-    ? new Date(value * 1000).toLocaleString(undefined, { timeZone: displayTimezone.value })
+    ? new Date(value * 1000).toLocaleString(language.value, { timeZone: displayTimezone.value })
     : '—'
 export const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value))
 export const number = (value?: number | null, suffix = '') =>
-  value == null ? '—' : `${value.toFixed(1)}${suffix}`
+  value == null
+    ? '—'
+    : `${new Intl.NumberFormat(language.value, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value)}${suffix}`
 
 export function download(name: string, content: string, type = 'application/json') {
   const url = URL.createObjectURL(new Blob([content], { type }))

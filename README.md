@@ -1,20 +1,26 @@
 # Probelune Dashboard
 
-[简体中文](README.zh-CN.md) · [Product and PRD](https://github.com/sihuangtech/probelune) · [Probe node](https://github.com/sihuangtech/probelune-node)
+[简体中文](README.zh-CN.md) | [Product and PRD](https://github.com/sihuangtech/probelune) | [Probe node](https://github.com/sihuangtech/probelune-node)
 
-**Probelune (巡汐)** is a self-hosted service monitoring and network diagnosis system. Use the dashboard to follow checks from your own probe nodes, investigate failures across locations, and manage alerts.
+**Probelune** is a self-hosted service monitoring and network diagnosis system. Use the dashboard to follow checks from your own probe nodes, investigate failures across locations, and manage alerts.
+
+## Preview
+
+![Monitoring interface with example data](docs/images/dashboard-en-light.png)
+
+Example data only. The application supports language and light/dark/system theme switching.
 
 ## Features
 
-- Filter the overview and monitor list by TCP, UDP, ICMP, HTTP/HTTPS or DNS, with a short explanation of what each check measures. Type selection is shared between pages and remembered in the browser; monitor searches and status filters can be combined with it.
-- HTTP/HTTPS, TCP, UDP, ICMP and DNS monitoring with explicit node assignment, groups, tags, versioned configuration, pause and archive.
-- Target status, availability **and** coverage, raw evidence, certificate validity, timing and configurable availability history.
-- Consecutive failure/recovery confirmation; node outages remain separate from target failures.
-- Run-based multi-location diagnostics including MTR/traceroute, cancellation, and redacted JSON/CSV exports.
-- Searchable history with time, node, result and failure-stage filters and pagination.
-- Incidents, acknowledgement, notes, timed silence, maintenance windows, SMTP and signed Webhooks with retries.
-- Admin/operator/viewer roles, encrypted credentials, one-time node registration and mobile pairing, revocable sessions, optional public status page.
-- [Desktop](https://github.com/sihuangtech/probelune-desktop) and [Flutter mobile](https://github.com/sihuangtech/probelune-mobile) clients; optional self-managed FCM delivery.
+1. View health grouped by server in the overview. Filter monitor management by TCP, UDP, ICMP, HTTP/HTTPS or DNS, with protocol introductions, remembered type selection, search and status filters.
+2. HTTP/HTTPS, TCP, UDP, ICMP and DNS monitoring with explicit node assignment, groups, tags, versioned configuration, pause and archive.
+3. Target status, availability **and** coverage, raw evidence, certificate validity, timing and configurable availability history.
+4. Consecutive failure/recovery confirmation; node outages remain separate from target failures.
+5. Run-based multi-location diagnostics including MTR/traceroute, cancellation, and redacted JSON/CSV exports.
+6. Searchable history with time, node, result and failure-stage filters and pagination.
+7. Incidents, acknowledgement, notes, timed silence, maintenance windows, SMTP and signed Webhooks with retries.
+8. Admin/operator/viewer roles, encrypted credentials, one-time node registration and mobile pairing, revocable sessions, optional public status page.
+9. [Desktop](https://github.com/sihuangtech/probelune-desktop) and [Flutter mobile](https://github.com/sihuangtech/probelune-mobile) clients; optional self-managed FCM delivery.
 
 Deploy nodes on the public or private networks you want to observe. Initial releases target personal and small-team installations.
 
@@ -85,15 +91,15 @@ For live web development, run the Go server on port 8080, then run `npm ci` and 
 
 ## Documentation
 
-- [Deployment](docs/OPERATIONS.md): host service, Docker, HTTPS, backups and upgrades.
-- [Development](docs/ARCHITECTURE.md): architecture and local development.
-- [Notifications](docs/NOTIFICATIONS.md): SMTP, Webhooks and mobile push configuration.
-- [Dependencies](docs/DEPENDENCIES.md): verified versions and update policy.
-- [API](https://github.com/sihuangtech/probelune-contracts/tree/main/docs): HTTP endpoints and node protocol.
-- [Acceptance](https://github.com/sihuangtech/probelune/blob/main/docs/acceptance.md): observed results and remaining deployment checks.
-- [Releases](https://github.com/sihuangtech/probelune-dashboard/releases)
-- [Contributing](CONTRIBUTING.md)
-- [Security](SECURITY.md)
+1. [Deployment](docs/OPERATIONS.md): host service, Docker, HTTPS, backups and upgrades.
+2. [Development](docs/ARCHITECTURE.md): architecture and local development.
+3. [Notifications](docs/NOTIFICATIONS.md): SMTP, Webhooks and mobile push configuration.
+4. [Dependencies](docs/DEPENDENCIES.md): verified versions and update policy.
+5. [API](https://github.com/sihuangtech/probelune-contracts/tree/main/docs): HTTP endpoints and node protocol.
+6. [Acceptance](https://github.com/sihuangtech/probelune/blob/main/docs/acceptance.md): observed results and remaining deployment checks.
+7. [Releases](https://github.com/sihuangtech/probelune-dashboard/releases)
+8. [Contributing](CONTRIBUTING.md)
+9. [Security](SECURITY.md)
 
 Checks: `cd web && npm run lint && npm run build`; `cd server && GOWORK=off go vet ./... && GOWORK=off go test ./... && GOWORK=off go build ./cmd/server`.
 
@@ -105,6 +111,8 @@ GPL-3.0-or-later; see [LICENSE](LICENSE). Review the validation record before re
 
 ## Contact
 
-- Developer: [Snake Konginchrist](https://github.com/Snake-Konginchrist)
-- Email: [developer@skstudio.cn](mailto:developer@skstudio.cn)
-- Feedback: [GitHub Issues](https://github.com/sihuangtech/probelune-dashboard/issues)
+1. Developer: [Snake Konginchrist](https://github.com/Snake-Konginchrist)
+2. Email: [developer@skstudio.cn](mailto:developer@skstudio.cn)
+3. Feedback: [GitHub Issues](https://github.com/sihuangtech/probelune-dashboard/issues)
+
+[Localization](docs/LOCALIZATION.md)

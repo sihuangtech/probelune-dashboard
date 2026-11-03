@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { version } from "../../package.json"
+import { version } from '../../package.json'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Monitor, Connection, Aim, Bell, Setting, Grid, Warning } from '@element-plus/icons-vue'
@@ -30,10 +30,10 @@ async function logout() {
   <div class="workspace">
     <aside class="sidebar">
       <router-link to="/" class="brand"
-        ><span class="brand-orbit">◒</span><span>Probelune<small>巡 汐</small></span></router-link
+        ><span class="brand-orbit">◒</span><span>{{ t('appName') }}</span></router-link
       >
       <p class="eyebrow nav-caption">{{ t('monitorNetwork') }}</p>
-      <nav aria-label="Main navigation">
+      <nav :aria-label="t('navigation')">
         <router-link
           v-for="item in navigation"
           :key="item.path"
@@ -47,13 +47,13 @@ async function logout() {
         >
       </nav>
       <div class="sidebar-bottom">
-        <span class="status-dot" /> SELF-HOSTED <small>v{{ version }}</small>
+        <span class="status-dot" /> {{ t('selfHosted') }} <small>v{{ version }}</small>
       </div>
     </aside>
     <div class="content-shell">
       <header class="topbar">
         <div>
-          <span class="eyebrow">PROBELUNE / </span><strong>{{ t(title) }}</strong>
+          <span class="eyebrow">{{ t('appName') }} / </span><strong>{{ t(title) }}</strong>
         </div>
         <div class="account">
           <span>{{ user?.username }}</span
@@ -62,7 +62,7 @@ async function logout() {
         </div>
       </header>
       <main class="page-content"><router-view /></main>
-      <footer>Probelune · {{ t('tagline') }}</footer>
+      <footer>{{ t('appName') }} - {{ t('tagline') }}</footer>
     </div>
   </div>
 </template>

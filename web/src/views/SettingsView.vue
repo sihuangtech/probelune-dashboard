@@ -39,7 +39,7 @@ async function save() {
 <template>
   <div class="page-title">
     <div>
-      <p class="eyebrow">YOUR OBSERVATION NETWORK</p>
+      <p class="eyebrow">{{ t('settingsEyebrow') }}</p>
       <h1>{{ t('settings') }}</h1>
     </div>
   </div>

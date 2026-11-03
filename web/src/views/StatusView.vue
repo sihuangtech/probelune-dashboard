@@ -66,7 +66,7 @@ const events = computed(() =>
   <main class="public-status">
     <header class="status-heading">
       <div>
-        <p class="eyebrow">PROBELUNE / SERVICE STATUS</p>
+        <p class="eyebrow">{{ t('statusEyebrow') }}</p>
         <h1>{{ data.name }}</h1>
       </div>
       <span class="status-mark">◉</span>

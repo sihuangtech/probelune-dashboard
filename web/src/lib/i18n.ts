@@ -1,331 +1,63 @@
-import { ref } from 'vue'
-export const language = ref(
-  localStorage.getItem('probelune-language') || (navigator.language.startsWith('zh') ? 'zh' : 'en'),
-)
-const messages: Record<string, [string, string]> = {
-  latestLatency: ['延迟', 'Latency'],
-  historyUnavailable: ['历史暂不可用', 'History unavailable'],
-  serverHealth: ['服务器状态', 'Server health'],
-  otherTargets: ['其他监测目标', 'Other monitored targets'],
-  panelHealth: ['面板状态', 'Panel health'],
-  heartbeat: ['节点心跳', 'Node heartbeat'],
-  noChecks: ['暂无检测', 'No checks'],
-  mixedHealth: ['部分检测异常', 'Some checks failing'],
-  targetResults: ['检测结果', 'Check results'],
-  monitorStatus: ['状态', 'Status'],
-  allStatuses: ['全部状态', 'All statuses'],
-  allTypes: ['全部类型', 'All types'],
-  noTypeMonitors: ['此类型暂无匹配的监测', 'No matching monitors of this type'],
-  filteredMonitors: ['当前筛选', 'Filtered monitors'],
-  probeSource: ['探测来源', 'Probe source'],
-  panelOverviewHint: [
-    '由面板机发起检测，按类型查看目标服务器的状态与历史。',
-    'Checks originate from the panel server. Browse target server status and history by type.',
-  ],
-  probeNodes: ['节点服务器', 'Node servers'],
-  panelSourceHint: [
-    '面板机负责发起检测，节点服务器提供在线状态与被测服务。',
-    'The panel originates checks; node servers provide heartbeats and target services.',
-  ],
-  checkIntro_all: [
-    '选择一种探测类型，了解对应协议并查看检测结果。',
-    'Select a check type to learn about its protocol and view results.',
-  ],
-  checkIntro_tcp: [
-    'TCP（Transmission Control Protocol，传输控制协议）提供面向连接、可靠且有序的字节流传输，通过确认、重传等机制处理数据丢失。TCP 探测检查目标端口能否建立连接及连接耗时。',
-    'TCP (Transmission Control Protocol) provides a connection-oriented, reliable, ordered byte stream using acknowledgements and retransmissions. TCP checks measure whether a target port accepts a connection and how long it takes.',
-  ],
-  checkIntro_udp: [
-    'UDP（User Datagram Protocol，用户数据报协议）以无连接的数据报方式传输消息，协议本身不保证送达或顺序，常用于 DNS、实时音视频等场景。UDP 探测发送指定数据并等待响应。',
-    'UDP (User Datagram Protocol) sends connectionless datagrams without guaranteeing delivery or ordering. It is used by DNS and real-time media applications. UDP checks send a payload and wait for a reply.',
-  ],
-  checkIntro_ping: [
-    'ICMP（Internet Control Message Protocol，互联网控制报文协议）用于传递 IP 网络的错误和控制信息。Ping 利用其回显请求与应答测量往返延迟和丢包率；是否回应也受防火墙策略影响。',
-    'ICMP (Internet Control Message Protocol) carries error and control information for IP networks. Ping uses echo requests and replies to measure round-trip latency and loss; firewall policies can affect replies.',
-  ],
-  checkIntro_http: [
-    'HTTP（Hypertext Transfer Protocol，超文本传输协议）通过请求与响应交换网页、API 等资源。HTTPS 使用 TLS 保护 HTTP 通信并验证服务端身份。此类探测检查响应状态、内容、耗时及证书。',
-    'HTTP (Hypertext Transfer Protocol) exchanges web and API resources through requests and responses. HTTPS protects HTTP with TLS and authenticates the server. These checks examine response status, content, timing and certificates.',
-  ],
-  checkIntro_dns: [
-    'DNS（Domain Name System，域名系统）是一套分布式命名系统，用于查询域名对应的 IP 地址、邮件服务器等资源记录，传统查询通常使用 UDP 或 TCP 的 53 端口。DNS 探测检查解析结果和查询耗时。',
-    'DNS (Domain Name System) is a distributed naming system for records such as IP addresses and mail servers. Traditional queries use UDP or TCP port 53. DNS checks inspect answers and query time.',
-  ],
-  checkIntro_mtr: [
-    'MTR 是结合路由追踪与连续 Ping 的网络诊断工具，展示到目标路径上各跳的响应、延迟和丢包情况。它不是独立的通信协议；中间路由器的应答限制可能影响显示结果。',
-    'MTR combines route tracing and repeated probes to report replies, latency and loss along a path. It is a diagnostic tool, not a separate protocol; router reply limits can affect its output.',
-  ],
-  checkIntro_traceroute: [
-    'Traceroute 是路由追踪工具，通过逐步增加 IP 报文的生存时间（TTL）并分析返回报文推断路径。它不是独立的通信协议，工具可使用 UDP、ICMP 或 TCP 发送探测。',
-    'Traceroute infers a route by increasing the IP time-to-live (TTL) and examining replies. It is a diagnostic tool, not a separate protocol, and can use UDP, ICMP or TCP probes.',
-  ],
-  protocolName_tcp: ['TCP - 传输控制协议', 'TCP - Transmission Control Protocol'],
-  protocolName_udp: ['UDP - 用户数据报协议', 'UDP - User Datagram Protocol'],
-  protocolName_ping: ['ICMP - 互联网控制报文协议', 'ICMP - Internet Control Message Protocol'],
-  protocolName_http: [
-    'HTTP / HTTPS - 超文本传输协议',
-    'HTTP / HTTPS - Hypertext Transfer Protocol',
-  ],
-  protocolName_dns: ['DNS - 域名系统', 'DNS - Domain Name System'],
-  protocolName_mtr: ['MTR - 路由诊断工具', 'MTR - Route diagnostics'],
-  protocolName_traceroute: ['Traceroute - 路由追踪工具', 'Traceroute - Route tracing'],
-  protocolLayer_tcp: ['传输层（OSI 第 4 层）', 'Transport layer (OSI layer 4)'],
-  protocolLayer_udp: ['传输层（OSI 第 4 层）', 'Transport layer (OSI layer 4)'],
-  protocolLayer_ping: ['网络层（OSI 第 3 层）', 'Network layer (OSI layer 3)'],
-  protocolLayer_http: ['应用层（OSI 第 7 层）', 'Application layer (OSI layer 7)'],
-  protocolLayer_dns: ['应用层（OSI 第 7 层）', 'Application layer (OSI layer 7)'],
-  protocolLayer_mtr: ['诊断工具', 'Diagnostic tool'],
-  protocolLayer_traceroute: ['诊断工具', 'Diagnostic tool'],
-  udpHint: [
-    '发送成功不代表服务可用；必须收到响应才算成功。无响应不能证明端口关闭。',
-    'A successful send is not a health check. A response is required; no response does not prove the port is closed.',
-  ],
-  udpEncoding: ['UDP 数据编码', 'UDP data encoding'],
-  udpPayload: ['UDP 请求内容（最多 1400 字节）', 'UDP request payload (up to 1400 bytes)'],
-  udpExpected: [
-    '响应包含内容（相同编码，留空接受任意非空响应）',
-    'Response contains (same encoding; blank accepts any non-empty reply)',
-  ],
-  uptimeHistory: ['可用性历史', 'Availability history'],
-  uptimeHint: [
-    '每个色块汇总一段时间的真实探测结果。点击查看详情；灰色表示无有效数据，斜纹表示覆盖不足。',
-    'Each cell summarizes real checks over a time window. Select a cell for details. Grey means no valid samples; hatching means incomplete coverage.',
-  ],
-  rangeHours: ['回看范围（小时）', 'Lookback (hours)'],
-  bucketMinutes: ['色块粒度（分钟）', 'Cell duration (minutes)'],
-  minutes: ['分钟', 'min'],
-  hour: ['小时', 'hour'],
-  apply: ['应用', 'Apply'],
-  rangeLimit: [
-    '最多展示 2016 个色块，请缩短范围或增大粒度。',
-    'Use at most 2016 cells. Shorten the range or increase cell duration.',
-  ],
-  minutesPerCell: ['分钟 / 色块', 'min / cell'],
-  probeEvery: ['探测间隔', 'Check interval'],
-  seconds: ['秒', 'seconds'],
-  allOperational: ['所有公开服务运行正常', 'All public services are operational'],
-  attentionNeeded: [
-    '部分服务异常、维护中或观测覆盖不足',
-    'Some services need attention or more observations',
-  ],
-  noPublicMonitors: ['暂无公开的监测服务', 'No public services yet'],
-  sampleCounts: ['成功 / 失败 / 执行错误', 'Success / failure / executor error'],
-  expectedSamples: ['应执行样本数', 'Expected samples'],
-  noConfirmedIncident: [
-    '此时段没有已确认事件；单次失败不一定触发事件。',
-    'No confirmed incident in this window. A failed sample does not necessarily open an incident.',
-  ],
-  clearRange: ['返回完整范围', 'Clear time selection'],
-  allNodes: ['所有节点', 'All nodes'],
-  allResults: ['所有结果', 'All results'],
-  allStages: ['所有阶段', 'All stages'],
-  historySummaryHint: [
-    '曲线与汇总按时间和节点统计；结果类型、阶段筛选仅作用于下方明细。',
-    'Chart and summary use the selected time and node. Status and stage filters apply to the raw results below.',
-  ],
-  rawHistoryHint: [
-    '没有匹配的原始记录。超过保留期的明细已归档，仍可查看可用性色块。',
-    'No matching raw results. Older samples may be archived; availability cells remain available.',
-  ],
-  uptime_healthy: ['正常', 'Healthy'],
-  uptime_partial: ['存在失败', 'Some checks failed'],
-  uptime_down: ['观测均失败', 'All observed checks failed'],
-  uptime_incomplete: ['覆盖不足', 'Incomplete coverage'],
-  uptime_unknown: ['无有效数据', 'No valid samples'],
-  batchResults: ['本次诊断结果', 'This diagnostic run'],
-  allRuns: ['全部诊断', 'All runs'],
-  diagnosisHint: [
-    '同一批次按节点对照，手动复查不会改变持续监测状态。',
-    'Compare nodes within this run. Manual diagnostics do not change continuous monitoring state.',
-  ],
-  unsupportedNode: ['不支持所选检查，请先升级节点', 'Unsupported check; upgrade this node first'],
-  setupJourney: ['开始你的第一次观测', 'Your first observation'],
-  setupJourneyHint: [
-    '按顺序接入节点、创建监测并验证告警。',
-    'Connect a node, create a monitor and verify alert delivery.',
-  ],
-  connectNode: ['连接探测节点', 'Connect a probe'],
-  createMonitor: ['创建第一个监测', 'Create your first monitor'],
-  verifyAlert: ['发送并检查测试通知', 'Send and verify a test notification'],
-  binaryInstall: ['二进制', 'Binary'],
-  containerInstall: ['Docker 容器', 'Docker container'],
-  copyCommand: ['复制命令', 'Copy command'],
-  nodeWaiting: [
-    '等待节点上线，注册后将自动显示。',
-    'Waiting for this node to connect. Its status will appear automatically.',
-  ],
-  nodeConnected: ['节点已连接，可以创建监测。', 'Node connected. You can create a monitor now.'],
+import { ref, watch, watchEffect } from 'vue'
+import { createI18n } from 'vue-i18n'
+import backendErrors from './backendErrors.json'
+import en from './locales/en.json'
+import zhCN from './locales/zh-CN.json'
+import zhTW from './locales/zh-TW.json'
+import ja from './locales/ja.json'
+import ko from './locales/ko.json'
+import de from './locales/de.json'
+import fr from './locales/fr.json'
+import es from './locales/es.json'
 
-  overview: ['总览', 'Overview'],
-  monitors: ['监测管理', 'Monitor management'],
-  nodes: ['节点服务器', 'Servers'],
-  diagnostics: ['即时诊断', 'Diagnostics'],
-  incidents: ['故障事件', 'Incidents'],
-  alerts: ['告警与维护', 'Alerts & maintenance'],
-  settings: ['设置', 'Settings'],
-  tagline: ['集中检测，清晰掌握服务状态。', 'Central checks. Clear service status.'],
-  live: ['实时观测', 'LIVE OBSERVATIONS'],
-  healthy: ['正常', 'Healthy'],
-  failed: ['检查失败', 'Failed'],
-  down: ['全部位置异常', 'All locations failing'],
-  partial: ['部分位置异常', 'Partial outage'],
-  unknown: ['未知', 'Unknown'],
-  pending: ['待确认', 'Pending'],
-  paused: ['已暂停', 'Paused'],
-  archived: ['已归档', 'Archived'],
-  online: ['在线', 'Online'],
-  offline: ['离线', 'Offline'],
-  maintenance: ['维护中', 'Maintenance'],
-  success: ['成功', 'Success'],
-  failure: ['目标失败', 'Target failed'],
-  error: ['执行错误', 'Executor error'],
-  queued: ['排队中', 'Queued'],
-  running: ['执行中', 'Running'],
-  done: ['已完成', 'Complete'],
-  cancelled: ['已取消', 'Cancelled'],
-  expired: ['已过期', 'Expired'],
-  sent: ['已发送', 'Sent'],
-  suppressed: ['已抑制', 'Suppressed'],
-  skipped: ['已跳过', 'Skipped'],
-  add: ['添加', 'Add'],
-  save: ['保存', 'Save'],
-  cancel: ['取消', 'Cancel'],
-  edit: ['编辑', 'Edit'],
-  copyFailed: [
-    '复制不可用，请手动选择命令复制。',
-    'Clipboard unavailable. Select and copy the command manually.',
-  ],
-  copy: ['复制', 'Duplicate'],
-  search: ['搜索名称、目标或分组', 'Search name, target or group'],
-  empty: ['这里还没有数据', 'Nothing here yet'],
-  noNodes: [
-    '先部署第一个探测节点，再创建监测。',
-    'Connect your first node, then create a monitor.',
-  ],
-  name: ['名称', 'Name'],
-  target: ['目标', 'Target'],
-  type: ['检测类型', 'Check type'],
-  group: ['分组', 'Group'],
-  tags: ['标签', 'Tags'],
-  interval: ['间隔（秒）', 'Interval (seconds)'],
-  timeout: ['截止时间（秒）', 'Timeout (seconds)'],
-  failThreshold: ['失败确认次数', 'Failures to confirm'],
-  recoverThreshold: ['恢复确认次数', 'Successes to recover'],
-  minFailed: ['告警所需失败节点数', 'Failed nodes to alert'],
-  enabled: ['启用', 'Enabled'],
-  public: ['公开到状态页', 'Include on status page'],
-  nodeChoice: ['执行节点', 'Run from nodes'],
-  channels: ['通知渠道', 'Notification channels'],
-  headers: ['请求头 JSON（留空保留原值）', 'Headers JSON (blank keeps current)'],
-  expected: ['期望状态码（0 表示 2xx/3xx）', 'Expected status (0: 2xx/3xx)'],
-  contains: ['响应包含文本', 'Response contains'],
-  follow: ['跟随重定向', 'Follow redirects'],
-  insecure: ['允许无效证书（仍记录校验错误）', 'Allow invalid TLS (errors still recorded)'],
-  family: ['IP 协议族', 'IP family'],
-  resolver: ['DNS 解析器（留空使用系统）', 'DNS resolver (blank: system)'],
-  dnsExpected: ['期望 DNS 文本', 'Expected DNS text'],
-  count: ['探测包数', 'Packet count'],
-  size: ['包大小', 'Packet size'],
-  loss: ['允许丢包率 %', 'Allowed packet loss %'],
-  retries: ['重试次数', 'Retries'],
-  port: ['端口', 'Port'],
-  record: ['记录类型', 'Record type'],
-  certificateDays: [
-    '证书最少剩余天数（0 为关闭）',
-    'Minimum certificate lifetime in days (0 = off)',
-  ],
-  reminderMinutes: ['持续提醒间隔（分钟，0 为关闭）', 'Repeat reminder minutes (0 = off)'],
-  coverage: ['覆盖率', 'Coverage'],
-  incomplete: ['覆盖不足', 'Incomplete coverage'],
-  availability: ['可用率', 'Availability'],
-  latency: ['耗时', 'Latency'],
-  history: ['历史记录', 'History'],
-  recheck: ['立即复查', 'Recheck now'],
-  updated: ['最近更新', 'Last updated'],
-  noSample: ['暂无有效样本', 'No valid samples'],
-  evidence: ['查看证据', 'View evidence'],
-  region: ['地区（手动填写）', 'Region (user supplied)'],
-  network: ['网络标签', 'Network label'],
-  policy: ['允许的私网 CIDR（每行一项）', 'Allowed private CIDRs (one per line)'],
-  credentials: ['重签注册凭据', 'Rotate credentials'],
-  revoke: ['撤销节点', 'Revoke node'],
-  install: ['安装与注册', 'Installation & registration'],
-  tokenOnce: [
-    '注册凭据仅显示一次，10 分钟有效。',
-    'Registration token is shown once and expires in 10 minutes.',
-  ],
-  nodeHint: [
-    '节点仅主动连接面板，无需开放入站端口。',
-    'Nodes connect outward. No inbound ports required.',
-  ],
-  capabilities: ['支持能力', 'Capabilities'],
-  version: ['版本', 'Version'],
-  view: ['查看', 'View'],
-  export: ['导出', 'Export'],
-  start: ['开始诊断', 'Start diagnosis'],
-  location: ['执行位置', 'Location'],
-  stage: ['失败阶段', 'Stage'],
-  output: ['结果详情', 'Result details'],
-  acknowledge: ['确认知悉', 'Acknowledge'],
-  silence: ['静默 1 小时', 'Silence for 1 hour'],
-  note: ['添加备注', 'Add note'],
-  active: ['进行中', 'Active'],
-  recovered: ['已恢复', 'Recovered'],
-  acknowledged: ['已知悉', 'Acknowledged'],
-  username: ['用户名', 'Username'],
-  password: ['密码', 'Password'],
-  login: ['登录', 'Sign in'],
-  setup: ['初始化管理员', 'Create administrator'],
-  setupToken: ['服务器 setup-token', 'Server setup-token'],
-  logout: ['退出登录', 'Sign out'],
-  connect: ['连接你的观测网络', 'Connect your observation network'],
-  secureHint: [
-    '密码至少 12 字符；首次初始化令牌位于服务器私有数据目录。',
-    'Use at least 12 characters. The setup token lives in the server private data directory.',
-  ],
-  role: ['角色', 'Role'],
-  viewer: ['只读成员', 'Viewer'],
-  operator: ['操作员', 'Operator'],
-  admin: ['管理员', 'Administrator'],
-  members: ['成员', 'Members'],
-  instance: ['实例', 'Instance'],
-  pair: ['配对移动端', 'Pair mobile device'],
-  publicURL: ['公开访问地址', 'Public URL'],
-  timezone: ['时区', 'Timezone'],
-  rawDays: ['原始数据保留天数', 'Raw retention days'],
-  eventDays: ['事件与审计保留天数', 'Event retention days'],
-  publicStatus: ['启用公开状态页', 'Enable public status page'],
-  statusPage: ['状态页', 'Status page'],
-  audit: ['审计日志', 'Audit log'],
-  devices: ['设备与会话', 'Devices & sessions'],
-  test: ['测试通知', 'Test notification'],
-  deliveries: ['发送记录', 'Delivery log'],
-  startTime: ['开始时间', 'Start time'],
-  endTime: ['结束时间', 'End time'],
-  allMonitors: ['留空代表全部监测', 'Empty means all monitors'],
-  details: ['详情', 'Details'],
-  confirm: ['确认', 'Confirm'],
-  remove: ['删除', 'Delete'],
-  archive: ['归档', 'Archive'],
-  restore: ['恢复', 'Restore'],
-  loading: ['正在连接面板…', 'Connecting to the dashboard…'],
-  retry: ['重试', 'Retry'],
-  readOnly: ['只读访问', 'Read-only access'],
-  noIncident: ['没有进行中的故障事件', 'No active incidents'],
-  monitorNetwork: ['观测网络', 'OBSERVATION NETWORK'],
-  total: ['监测总数', 'Total monitors'],
-  onlineNodes: ['在线节点', 'Online nodes'],
-  failures: ['当前异常', 'Current failures'],
-  matrix: ['多位置观测矩阵', 'Multi-location matrix'],
-  removeConfirm: ['确定执行此操作？', 'Confirm this action?'],
-  pause: ['暂停', 'Pause'],
-  resume: ['启用', 'Resume'],
-  offlineCache: ['离线：展示最后一次成功获取的数据', 'Offline: showing last known data'],
+export const languageNames: Record<string, string> = {
+  en: 'English',
+  'zh-CN': '简体中文',
+  'zh-TW': '繁體中文',
+  ja: '日本語',
+  ko: '한국어',
+  de: 'Deutsch',
+  fr: 'Français',
+  es: 'Español',
 }
-export function t(key: string) {
-  return messages[key]?.[language.value === 'zh' ? 0 : 1] ?? key
+export function resolveLanguage(value: string) {
+  const tag = value.toLowerCase()
+  if (tag.startsWith('zh')) return /tw|hk|mo|hant/.test(tag) ? 'zh-TW' : 'zh-CN'
+  const base = tag.split('-')[0]!
+  return base in languageNames ? base : 'en'
 }
-export function toggleLanguage() {
-  language.value = language.value === 'zh' ? 'en' : 'zh'
-  localStorage.setItem('probelune-language', language.value)
+export const i18n = createI18n({
+  legacy: false,
+  locale: resolveLanguage(
+    localStorage.getItem('probelune-language') === 'system'
+      ? navigator.language
+      : localStorage.getItem('probelune-language') || navigator.language,
+  ),
+  fallbackLocale: 'en',
+  missingWarn: false,
+  fallbackWarn: false,
+  messages: { en, 'zh-CN': zhCN, 'zh-TW': zhTW, ja, ko, de, fr, es },
+})
+export const language = i18n.global.locale
+const saved = localStorage.getItem('probelune-language')
+export const languagePreference = ref(saved === 'zh' ? 'zh-CN' : saved || 'system')
+watch(
+  languagePreference,
+  (value) => {
+    language.value = resolveLanguage(
+      value === 'system' ? navigator.language : value,
+    ) as typeof language.value
+    localStorage.setItem('probelune-language', value)
+  },
+  { immediate: true },
+)
+export const t = (key: string) => i18n.global.t(key)
+watchEffect(() => {
+  document.documentElement.lang = language.value
+  document.title = t('appName')
+})
+
+export function translateServerError(value: string) {
+  const key = (backendErrors as Record<string, string>)[value]
+  return key ? t(key) : value
 }

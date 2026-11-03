@@ -30,8 +30,8 @@ async function submit() {
 <template>
   <div class="login-layout">
     <section class="login-story">
-      <div class="brand"><span class="brand-orbit">◒</span>Probelune</div>
-      <span class="eyebrow">DISTRIBUTED OBSERVABILITY</span>
+      <div class="brand"><span class="brand-orbit">◒</span>{{ t('appName') }}</div>
+      <span class="eyebrow">{{ t('loginEyebrow') }}</span>
       <h1>{{ t('tagline') }}</h1>
       <div class="orbital-map">
         <span class="orbit o1" /><span class="orbit o2" /><span class="orbit o3" /><b>巡汐</b>
@@ -39,7 +39,7 @@ async function submit() {
       <p>{{ t('nodeHint') }}</p>
     </section>
     <section class="login-form">
-      <p class="eyebrow">YOUR PRIVATE CONTROL ROOM</p>
+      <p class="eyebrow">{{ t('loginHeading') }}</p>
       <h2>{{ t('connect') }}</h2>
       <p class="muted">{{ t(initialized ? 'login' : 'secureHint') }}</p>
       <el-form label-position="top" @submit.prevent="submit"

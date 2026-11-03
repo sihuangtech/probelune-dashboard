@@ -87,10 +87,10 @@ Raw samples default to 7 days (configurable 1–90); 5-minute buckets are kept 9
 
 ## Operational limits
 
-- Check interval 15–86400 seconds, timeout 1–60 seconds and strictly below the interval; no overlapping execution of the same assignment.
-- One diagnostic request targets 1–20 nodes; one monitor binds 1–50. UI refresh uses polling, not a streaming subscription.
-- Raw history is paginated (up to 1000 rows); aggregate history covers up to one year. Large result bodies are bounded.
-- Monitor, node and member lists are intended for small instances; large-team load/SLO targets require benchmark validation.
-- The panel cannot notify reliably while it is down. Configure an independent external health check of `/healthz`, disk space and backups.
+1. Check interval 15–86400 seconds, timeout 1–60 seconds and strictly below the interval; no overlapping execution of the same assignment.
+2. One diagnostic request targets 1–20 nodes; one monitor binds 1–50. UI refresh uses polling, not a streaming subscription.
+3. Raw history is paginated (up to 1000 rows); aggregate history covers up to one year. Large result bodies are bounded.
+4. Monitor, node and member lists are intended for small instances; large-team load/SLO targets require benchmark validation.
+5. The panel cannot notify reliably while it is down. Configure an independent external health check of `/healthz`, disk space and backups.
 
 Logs avoid raw credentials. A failed delivery is visible under Alerts; `sent` means provider/channel acceptance, never proof that a human read it. FCM/APNs and SMTP provider credentials must be supplied by the deployer.

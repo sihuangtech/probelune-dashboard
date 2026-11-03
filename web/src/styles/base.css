@@ -1,4 +1,5 @@
 :root {
+  --surface: #fff;
   --ink: #152c36;
   --muted: #657b83;
   --paper: #f4f6f4;
@@ -87,7 +88,7 @@ small,
   margin-bottom: 0;
 }
 .panel {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 24px;
@@ -175,7 +176,7 @@ small,
 }
 .result-card {
   padding: 20px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 9px;
 }
@@ -253,7 +254,7 @@ small,
   bottom: 16px;
   right: 18px;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--surface);
   padding: 5px 12px;
   border-radius: 6px;
   font-size: 11px;
@@ -281,3 +282,48 @@ small,
   border-radius: 4px;
   padding: 2px 6px;
 }
+
+.github-link {
+  position: fixed;
+  bottom: 16px;
+  right: 164px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  z-index: 50;
+  font-size: 22px;
+}
+.language-toggle {width: 136px; height: 36px;}
+.github-link:focus-visible {outline: 2px solid var(--teal); outline-offset: 2px;}
+
+html.dark {
+  --ink: #e0ece9;
+  --muted: #a3b8b5;
+  --paper: #101c21;
+  --surface: #192b31;
+  --line: #35464b;
+  --teal: #69d5ba;
+  --navy: #102229;
+  --el-color-primary: #69d5ba;
+  --el-bg-color: #192b31;
+  --el-bg-color-page: #101c21;
+  --el-bg-color-overlay: #203239;
+  --el-text-color-primary: #e0ece9;
+  --el-text-color-regular: #c2d3cf;
+  --el-border-color: #35464b;
+}
+html.dark .stat-card.primary {background: #163c34;}
+html.dark .health-pill {background: #263a40;}
+html.dark .health-pill.healthy {background: #164b3c; color: #88e4bf;}
+html.dark .health-pill.down, html.dark .health-pill.failed {background: #542e32; color: #ffb3b0;}
+html.dark .el-table {--el-table-header-bg-color:#20353b;--el-table-row-hover-bg-color:#233e43;}
+.global-tools {position:fixed;right:18px;bottom:16px;display:flex;align-items:center;gap:8px;z-index:50;}
+.global-tools .github-link, .global-tools .language-toggle {position:static;}
+.global-tools .language-toggle {width:132px;}
+.theme-toggle {width:106px;height:36px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);padding:4px;font:inherit;font-size:11px;}
+.language-toggle {color:var(--ink);}

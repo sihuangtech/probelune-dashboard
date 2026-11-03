@@ -29,7 +29,7 @@ const { definitions, catalogError } = useCheckCatalog()
   /></el-form-item>
   <template v-if="model.type === 'http'"
     ><div class="grid-two">
-      <el-form-item label="HTTP Method"
+      <el-form-item :label="t('httpMethod')"
         ><el-select v-model="model.method"
           ><el-option value="GET" /><el-option value="HEAD" /></el-select></el-form-item
       ><el-form-item :label="t('expected')"
