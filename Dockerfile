@@ -1,4 +1,4 @@
-FROM node:26.12.1-trixie-slim AS web
+FROM node:26.13.0-trixie-slim AS web
 RUN npm install --global npm@12.2.1
 WORKDIR /src/web
 COPY web/package*.json ./
