@@ -2,7 +2,6 @@ package api
 
 import (
 	"bytes"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -87,7 +86,7 @@ type demoDiagnosticSeed struct {
 func NewDemo(dir, seedPath string) (*Server, error) {
 	s, err := New(dir)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("打开演示数据目录: %w", err)
 	}
 	s.DemoMode = true
 	s.DemoTokenPrefix = demoTokenPrefix
@@ -100,7 +99,7 @@ func NewDemo(dir, seedPath string) (*Server, error) {
 	}
 	if err != nil {
 		s.Store.DB.Close()
-		return nil, err
+		return nil, fmt.Errorf("初始化演示数据: %w", err)
 	}
 	return s, nil
 }
@@ -131,12 +130,12 @@ func loadDemoSeed(dir, seedPath string) (demoSeed, error) {
 
 func seedDemo(s *Server, seed demoSeed) error {
 	var previous string
-	err := s.Store.DB.QueryRow(`SELECT value FROM meta WHERE key='demo_seed_version'`).Scan(&previous)
-	if err != nil && err != sql.ErrNoRows {
-		return err
+	err := s.Store.DB.QueryRow(`SELECT COALESCE((SELECT value FROM meta WHERE key='demo_seed_version'), '')`).Scan(&previous)
+	if err != nil {
+		return fmt.Errorf("读取演示数据版本: %w", err)
 	}
 	if previous != seed.SeedVersion {
-		if _, err = s.Store.DB.Exec(`DELETE FROM documents; DELETE FROM runs; DELETE FROM buckets; DELETE FROM meta WHERE key='demo_seed_version'`); err != nil {
+		if _, err = s.Store.DB.Exec(`DELETE FROM documents WHERE kind <> 'settings'; DELETE FROM runs; DELETE FROM buckets; DELETE FROM meta WHERE key='demo_seed_version'`); err != nil {
 			return err
 		}
 	}
@@ -144,7 +143,7 @@ func seedDemo(s *Server, seed demoSeed) error {
 	now := Now()
 	var cfg model.Settings
 	if err = s.Store.Get("settings", "instance", &cfg); err != nil {
-		return err
+		return fmt.Errorf("读取演示实例设置: %w", err)
 	}
 	cfg.Name, cfg.PublicURL, cfg.Timezone = seed.Settings.Name, "", seed.Settings.Timezone
 	if cfg.Name == "" {

@@ -59,7 +59,7 @@ An example Caddy configuration is in `deploy/Caddyfile.example`. The systemd uni
 
 ## Read-only demo entry
 
-Set `PROBELUNE_DEMO_MODE=true` to show a **Try the demo** entry on the login page. The demo uses a separate SQLite database under `<data>/demo`, contains synthetic example targets and history, and runs no probe or notification workers. The public account is `demo` / `ProbeluneDemo2026!`; it has the `viewer` role and all write requests to the demo instance are rejected. Mobile reviewers can connect to the same HTTPS origin using these credentials.
+Set `PROBELUNE_DEMO_MODE=true` to show a **Try the demo** entry on the login page. The demo uses a separate SQLite database under `<data>/demo`, contains synthetic example targets and history, and runs no probe or notification workers. The public account is `demo` / `ProbeluneDemo2026!`; it has the `viewer` role and all monitor, node and configuration changes are rejected. Mobile reviewers can connect to the same HTTPS origin using these credentials.
 
 The seed starts as the standalone [`demo/demo_seed.json`](../demo/demo_seed.json) file and ships beside the `web` directory (or at the path in `PROBELUNE_DEMO_SEED`). On first start, the server copies it to `<data>/demo/seed.json` with private file permissions. Edit that runtime JSON and increment `seed_version` to rebuild only the isolated demo database on restart. Keep the mode disabled if you do not want to expose the sample dashboard; setting it to `false` and restarting hides the entry while retaining the demo data.
 
