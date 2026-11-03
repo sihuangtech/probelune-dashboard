@@ -58,9 +58,7 @@ h3 {
 }
 pre {
   font:
-    12px/1.65 'SFMono-Regular',
-    Consolas,
-    monospace;
+    12px/1.65 var(--el-font-family);
 }
 small,
 .muted {
@@ -68,9 +66,7 @@ small,
 }
 .eyebrow {
   font:
-    10px/1.5 'SFMono-Regular',
-    Consolas,
-    monospace;
+    10px/1.5 var(--el-font-family);
   letter-spacing: 1.5px;
   color: var(--muted);
 }

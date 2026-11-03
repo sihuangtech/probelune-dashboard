@@ -133,8 +133,7 @@
 }
 .stat-card .value {
   font:
-    32px/1.4 'SFMono-Regular',
-    monospace;
+    32px/1.4 var(--el-font-family);
   letter-spacing: -1px;
   margin: 9px 0;
   color: #213d46;
