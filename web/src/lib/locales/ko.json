@@ -357,5 +357,9 @@
   "backend881d75694c": "노드가 존재하지 않습니다",
   "backendeaa1941b80": "HTTP 어설션 또는 요청 헤더가 너무 큽니다.",
   "auditAction": "작업",
-  "privacyPolicy": "개인정보 처리방침"
+  "privacyPolicy": "개인정보 처리방침",
+  "enterDemo": "데모 체험",
+  "demoEntryHint": "샘플 모니터링 데이터를 읽기 전용으로 확인합니다.",
+  "demoReadOnlyBanner": "데모 환경 - 샘플 데이터 - 읽기 전용",
+  "or": "또는"
 }

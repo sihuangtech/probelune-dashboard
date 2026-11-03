@@ -36,7 +36,8 @@ Example data only. The application supports language and light/dark/system theme
 6. Searchable history with time, node, result and failure-stage filters and pagination.
 7. Incidents, acknowledgement, notes, timed silence, maintenance windows, SMTP and signed Webhooks with retries.
 8. Admin/operator/viewer roles, encrypted credentials, one-time node registration and mobile pairing, revocable sessions, optional public status page.
-9. [Desktop](https://github.com/sihuangtech/probelune-desktop) and [Flutter mobile](https://github.com/sihuangtech/probelune-mobile) clients; optional self-managed FCM delivery.
+9. Optional read-only demo entry with synthetic data in a standalone JSON file, isolated from the configured instance and compatible with the mobile client.
+10. [Desktop](https://github.com/sihuangtech/probelune-desktop) and [Flutter mobile](https://github.com/sihuangtech/probelune-mobile) clients; optional self-managed FCM delivery.
 
 Deploy nodes on the public or private networks you want to observe. Initial releases target personal and small-team installations.
 

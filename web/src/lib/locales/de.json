@@ -357,5 +357,9 @@
   "backend881d75694c": "Knoten existiert nicht",
   "backendeaa1941b80": "HTTP-Assertion oder Anforderungsheader ist zu groß",
   "auditAction": "Aktion",
-  "privacyPolicy": "Datenschutzerklärung"
+  "privacyPolicy": "Datenschutzerklärung",
+  "enterDemo": "Demo ansehen",
+  "demoEntryHint": "Beispieldaten im schreibgeschützten Modus ansehen.",
+  "demoReadOnlyBanner": "Demo-Umgebung - Beispieldaten - schreibgeschützt",
+  "or": "ODER"
 }

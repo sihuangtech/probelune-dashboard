@@ -357,5 +357,9 @@
   "backend881d75694c": "節點不存在",
   "backendeaa1941b80": "HTTP 斷言或請求頭過大",
   "auditAction": "操作",
-  "privacyPolicy": "隱私政策"
+  "privacyPolicy": "隱私政策",
+  "enterDemo": "體驗示範",
+  "demoEntryHint": "查看虛構監測資料，示範環境僅供瀏覽。",
+  "demoReadOnlyBanner": "示範環境 - 虛構資料 - 唯讀",
+  "or": "或"
 }

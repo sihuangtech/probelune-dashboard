@@ -65,6 +65,13 @@ async function logout() {
           </div>
         </div>
       </header>
+      <el-alert
+        v-if="user?.id === 'demo-user'"
+        class="demo-banner"
+        type="info"
+        :closable="false"
+        :title="t('demoReadOnlyBanner')"
+      />
       <main class="page-content"><router-view /></main>
       <footer>
         {{ t('appName') }} - {{ t('tagline') }} |

@@ -357,5 +357,9 @@
   "backend881d75694c": "ノードが存在しません",
   "backendeaa1941b80": "HTTP アサーションまたはリクエスト ヘッダーが大きすぎます",
   "auditAction": "操作",
-  "privacyPolicy": "プライバシーポリシー"
+  "privacyPolicy": "プライバシーポリシー",
+  "enterDemo": "デモを試す",
+  "demoEntryHint": "サンプルデータを読み取り専用で確認できます。",
+  "demoReadOnlyBanner": "デモ環境 - サンプルデータ - 読み取り専用",
+  "or": "または"
 }

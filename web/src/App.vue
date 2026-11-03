@@ -17,6 +17,7 @@ import AppShell from './components/AppShell.vue'
 import AppTools from './components/AppTools.vue'
 const ready = ref(false),
   initialized = ref(true),
+  demoAvailable = ref(false),
   error = ref('')
 const route = useRoute()
 const elementLocales: Record<string, typeof en> = {
@@ -33,8 +34,9 @@ const uiLocale = computed(() => elementLocales[language.value] || en)
 async function load() {
   error.value = ''
   try {
-    const status = await api<{ initialized: boolean }>('/auth/status')
+    const status = await api<{ initialized: boolean; demo_available?: boolean }>('/auth/status')
     initialized.value = status.initialized
+    demoAvailable.value = status.demo_available === true
     if (status.initialized) user.value = await api<User>('/auth/me').catch(() => null)
     ready.value = true
   } catch (e) {
@@ -65,7 +67,12 @@ watch(user, async (current) => {
         <el-button v-if="error" @click="load">{{ t('retry') }}</el-button>
       </div>
     </div>
-    <LoginView v-else-if="!user" :initialized="initialized" @signed-in="initialized = true" />
+    <LoginView
+      v-else-if="!user"
+      :initialized="initialized"
+      :demo-available="demoAvailable"
+      @signed-in="initialized = true"
+    />
     <AppShell v-else />
   </el-config-provider>
 </template>

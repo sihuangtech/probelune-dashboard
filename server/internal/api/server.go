@@ -20,11 +20,16 @@ import (
 )
 
 type Server struct {
-	Store      *store.Store
-	Dir        string
-	SetupToken string
-	mu         sync.Mutex
-	notify     chan struct{}
+	Store           *store.Store
+	Dir             string
+	SetupToken      string
+	DemoMode        bool
+	DemoTokenPrefix string
+	DemoUsername    string
+	DemoAvailable   bool
+	demoTouched     int64
+	mu              sync.Mutex
+	notify          chan struct{}
 }
 
 func ID() string {
@@ -133,6 +138,13 @@ func (s *Server) Router(web string) *gin.Engine {
 		if strings.HasPrefix(c.Request.URL.Path, "/api/") {
 			c.Header("Cache-Control", "no-store")
 			c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 2<<20)
+		}
+		if s.DemoMode && c.Request.Method != http.MethodGet && c.Request.Method != http.MethodHead && c.Request.Method != http.MethodOptions {
+			allowed := c.Request.Method == http.MethodPost && (c.Request.URL.Path == "/api/v1/auth/login" || c.Request.URL.Path == "/api/v1/auth/demo/login" || c.Request.URL.Path == "/api/v1/auth/logout")
+			if !allowed {
+				fail(c, http.StatusForbidden, "演示账号为只读账号")
+				return
+			}
 		}
 		origin := c.Request.Header.Get("Origin")
 		if origin != "" && c.Request.Method != "GET" && c.GetHeader("Authorization") == "" {

@@ -22,6 +22,7 @@ RUN apk add --no-cache ca-certificates tzdata \
     && mkdir /data && chown 65532:65532 /data
 COPY --from=server /out/probelune-dashboard /usr/local/bin/probelune-dashboard
 COPY --from=web /src/web/dist /app/web
+COPY demo/demo_seed.json /app/demo_seed.json
 USER 65532:65532
 EXPOSE 8080
 VOLUME /data

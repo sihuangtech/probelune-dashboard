@@ -1,0 +1,38 @@
+{
+  "seed_version": "1",
+  "credentials": {
+    "username": "demo",
+    "password": "ProbeluneDemo2026!"
+  },
+  "settings": {
+    "name": "Probelune Demo",
+    "timezone": "Asia/Shanghai"
+  },
+  "nodes": [
+    {"id": "demo-shanghai", "name": "Shanghai Demo Node", "region": "Shanghai", "network": "Mainland China", "capabilities": ["http", "tcp", "udp", "ping", "dns", "mtr", "traceroute"]},
+    {"id": "demo-tokyo", "name": "Tokyo Demo Node", "region": "Tokyo", "network": "Japan", "capabilities": ["http", "tcp", "udp", "ping", "dns", "mtr", "traceroute"]},
+    {"id": "demo-singapore", "name": "Singapore Demo Node", "region": "Singapore", "network": "Singapore", "capabilities": ["http", "tcp", "udp", "ping", "dns", "mtr", "traceroute"]}
+  ],
+  "monitors": [
+    {"id": "demo-http", "name": "Example Status Page", "group": "Web services", "tags": ["demo"], "check": {"type": "http", "target": "https://status.example.com/healthz", "method": "GET", "timeout": 10, "expected_status": 200, "follow_redirects": true}, "node_ids": ["demo-shanghai", "demo-tokyo"], "interval": 300, "fail_threshold": 3, "recover_threshold": 2, "min_failed_nodes": 1, "version": 1, "enabled": true, "public": true},
+    {"id": "demo-tcp", "name": "Example HTTPS Port", "group": "Network services", "tags": ["demo"], "check": {"type": "tcp", "target": "api.example.com", "port": 443, "timeout": 10}, "node_ids": ["demo-shanghai", "demo-singapore"], "interval": 300, "fail_threshold": 3, "recover_threshold": 2, "min_failed_nodes": 1, "version": 1, "enabled": true, "public": true},
+    {"id": "demo-udp", "name": "Example UDP Service", "group": "Network services", "tags": ["demo"], "check": {"type": "udp", "target": "dns.example.com", "port": 53, "timeout": 10, "udp_encoding": "text", "udp_payload": "probelune-demo", "udp_expected": "ok"}, "node_ids": ["demo-tokyo", "demo-singapore"], "interval": 300, "fail_threshold": 3, "recover_threshold": 2, "min_failed_nodes": 1, "version": 1, "enabled": true, "public": true},
+    {"id": "demo-icmp", "name": "Example Network Target", "group": "Network services", "tags": ["demo"], "check": {"type": "ping", "target": "192.0.2.1", "timeout": 10, "count": 3, "max_loss": 50}, "node_ids": ["demo-shanghai", "demo-tokyo"], "interval": 300, "fail_threshold": 3, "recover_threshold": 2, "min_failed_nodes": 1, "version": 1, "enabled": true, "public": true},
+    {"id": "demo-dns", "name": "Example DNS Record", "group": "Web services", "tags": ["demo"], "check": {"type": "dns", "target": "example.com", "timeout": 10, "dns_record": "A"}, "node_ids": ["demo-shanghai", "demo-singapore"], "interval": 300, "fail_threshold": 3, "recover_threshold": 2, "min_failed_nodes": 1, "version": 1, "enabled": true, "public": true}
+  ],
+  "history": {
+    "hours": 24,
+    "interval_seconds": 300,
+    "base_latency_ms": 18,
+    "jitter_ms": 7,
+    "failures": [
+      {"monitor_id": "demo-icmp", "node_id": "demo-tokyo", "last_samples": 3}
+    ]
+  },
+  "incidents": [
+    {"id": "demo-incident", "monitor_id": "demo-icmp", "node_id": "demo-tokyo", "name": "Example Network Target", "opened_minutes_ago": 15, "message": "Synthetic demo event: repeated check failures"}
+  ],
+  "diagnostics": [
+    {"id": "demo-diagnostic", "batch_id": "demo-batch", "monitor_id": "demo-tcp", "node_id": "demo-shanghai", "type": "tcp", "target": "api.example.com", "port": 443, "timeout": 10, "status": "success", "latency_ms": 24.8, "minutes_ago": 30}
+  ]
+}

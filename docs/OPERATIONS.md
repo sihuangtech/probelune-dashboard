@@ -57,6 +57,12 @@ Set `PROBELUNE_PUBLIC_URL=https://monitor.example.com` in the service/Compose en
 
 An example Caddy configuration is in `deploy/Caddyfile.example`. The systemd unit and Compose service both listen on loopback at port 8080 for this proxy.
 
+## Read-only demo entry
+
+Set `PROBELUNE_DEMO_MODE=true` to show a **Try the demo** entry on the login page. The demo uses a separate SQLite database under `<data>/demo`, contains synthetic example targets and history, and runs no probe or notification workers. The public account is `demo` / `ProbeluneDemo2026!`; it has the `viewer` role and all write requests to the demo instance are rejected. Mobile reviewers can connect to the same HTTPS origin using these credentials.
+
+The seed starts as the standalone [`demo/demo_seed.json`](../demo/demo_seed.json) file and ships beside the `web` directory (or at the path in `PROBELUNE_DEMO_SEED`). On first start, the server copies it to `<data>/demo/seed.json` with private file permissions. Edit that runtime JSON and increment `seed_version` to rebuild only the isolated demo database on restart. Keep the mode disabled if you do not want to expose the sample dashboard; setting it to `false` and restarting hides the entry while retaining the demo data.
+
 初始化令牌保存在私有数据目录的 `setup-token`，只供首次管理员创建使用。初始化后无需保留在浏览器或配置文件。管理员创建成员，角色为 admin、operator、viewer。客户端 HTTP 仅用于明确允许的受控开发网络，正式部署使用 HTTPS。私有 CA 可以通过主机受信任根证书配置接入，不能关闭全局 TLS 校验。
 
 ## Backup and restoration

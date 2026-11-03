@@ -316,3 +316,19 @@
 .login-form .muted {
   margin-bottom: 30px;
 }
+.demo-entry {
+  margin-top: 20px;
+}
+.demo-entry .el-divider {
+  margin: 18px 0;
+}
+.demo-entry .el-button {
+  margin-top: 0;
+}
+.demo-entry .muted {
+  margin: 10px 0 0;
+  text-align: center;
+}
+.demo-banner {
+  margin: 16px 32px 0;
+}

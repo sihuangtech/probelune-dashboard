@@ -4,7 +4,7 @@ import { api, user } from '../lib/api'
 import type { User } from '../lib/models'
 import { t } from '../lib/i18n'
 import AppTools from '../components/AppTools.vue'
-const props = defineProps<{ initialized: boolean }>()
+const props = defineProps<{ initialized: boolean; demoAvailable: boolean }>()
 const emit = defineEmits<{ signedIn: [] }>()
 const form = reactive({ username: '', password: '', setupToken: '' })
 const busy = ref(false),
@@ -19,6 +19,19 @@ async function submit() {
       { username: form.username, password: form.password },
       { 'X-Setup-Token': form.setupToken },
     )
+    user.value = data.user
+    emit('signedIn')
+  } catch (e) {
+    error.value = String(e)
+  } finally {
+    busy.value = false
+  }
+}
+async function enterDemo() {
+  busy.value = true
+  error.value = ''
+  try {
+    const data = await api<{ user: User }>('/auth/demo/login', 'POST', {})
     user.value = data.user
     emit('signedIn')
   } catch (e) {
@@ -66,6 +79,13 @@ async function submit() {
             >{{ t(initialized ? 'login' : 'setup') }}</el-button
           ></el-form
         >
+        <div v-if="props.demoAvailable" class="demo-entry">
+          <el-divider>{{ t('or') }}</el-divider>
+          <el-button class="full-width" :loading="busy" @click="enterDemo">{{
+            t('enterDemo')
+          }}</el-button>
+          <p class="muted">{{ t('demoEntryHint') }}</p>
+        </div>
         <p class="muted" style="margin-top: 24px">
           <router-link to="/privacy">{{ t('privacyPolicy') }}</router-link>
         </p>

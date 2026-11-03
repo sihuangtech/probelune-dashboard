@@ -46,10 +46,23 @@ func (s *Server) authRoutes(r *gin.Engine) {
 	a.GET("/status", func(c *gin.Context) {
 		s.mu.Lock()
 		defer s.mu.Unlock()
-		c.JSON(200, gin.H{"initialized": len(all[model.User](s, "user")) > 0})
+		c.JSON(200, gin.H{"initialized": len(all[model.User](s, "user")) > 0, "demo_available": s.DemoAvailable})
 	})
 	a.POST("/setup", rateLimit, s.setup)
 	a.POST("/login", rateLimit, s.login)
+	a.POST("/demo/login", rateLimit, func(c *gin.Context) {
+		if !s.DemoMode {
+			fail(c, 404, "演示入口未启用")
+			return
+		}
+		for _, u := range all[model.User](s, "user") {
+			if u.Username == s.DemoUsername && !u.Disabled {
+				s.issue(c, u)
+				return
+			}
+		}
+		fail(c, 503, "演示账号不可用")
+	})
 	a.POST("/pair/exchange", rateLimit, s.exchangePair)
 	a.GET("/me", s.authenticate, func(c *gin.Context) { c.JSON(200, c.MustGet("user")) })
 	a.POST("/logout", s.authenticate, func(c *gin.Context) {
@@ -88,7 +101,7 @@ func (s *Server) cookie(c *gin.Context, token string, age int) {
 	c.SetCookie("probelune_session", token, age, "/", "", c.Request.TLS != nil || strings.HasPrefix(os.Getenv("PROBELUNE_PUBLIC_URL"), "https://"), true)
 }
 func (s *Server) issue(c *gin.Context, u model.User) {
-	token := ID()
+	token := s.DemoTokenPrefix + ID()
 	age := 8 * 3600
 	if c.FullPath() == "/api/v1/auth/pair/exchange" || strings.HasPrefix(c.GetHeader("User-Agent"), "Probelune Mobile/") {
 		age = 30 * 86400

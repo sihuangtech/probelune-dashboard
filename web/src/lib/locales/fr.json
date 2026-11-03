@@ -357,5 +357,9 @@
   "backend881d75694c": "Le nœud n'existe pas",
   "backendeaa1941b80": "L'assertion HTTP ou l'en-tête de requête est trop volumineux",
   "auditAction": "Action",
-  "privacyPolicy": "Politique de confidentialité"
+  "privacyPolicy": "Politique de confidentialité",
+  "enterDemo": "Essayer la démo",
+  "demoEntryHint": "Consultez des données fictives en lecture seule.",
+  "demoReadOnlyBanner": "Environnement de démonstration - données fictives - lecture seule",
+  "or": "OU"
 }
