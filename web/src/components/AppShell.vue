@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { Monitor, Connection, Aim, Bell, Setting, Grid, Warning } from '@element-plus/icons-vue'
 import { api, user } from '../lib/api'
 import { t } from '../lib/i18n'
+import AppTools from './AppTools.vue'
 const route = useRoute()
 const navigation = [
   { path: '/', key: 'overview', icon: Grid },
@@ -52,13 +53,16 @@ async function logout() {
     </aside>
     <div class="content-shell">
       <header class="topbar">
-        <div>
+        <div class="page-breadcrumb">
           <span class="eyebrow">{{ t('appName') }} / </span><strong>{{ t(title) }}</strong>
         </div>
-        <div class="account">
-          <span>{{ user?.username }}</span
-          ><span class="role-label">{{ t(user?.role || 'viewer') }}</span
-          ><button @click="logout">{{ t('logout') }}</button>
+        <div class="topbar-actions">
+          <AppTools />
+          <div class="account">
+            <span class="account-name">{{ user?.username }}</span
+            ><span class="role-label">{{ t(user?.role || 'viewer') }}</span
+            ><button @click="logout">{{ t('logout') }}</button>
+          </div>
         </div>
       </header>
       <main class="page-content"><router-view /></main>

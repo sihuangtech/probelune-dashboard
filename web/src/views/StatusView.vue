@@ -5,6 +5,7 @@ import { t } from '../lib/i18n'
 import { loadUptimeRange, uptimeQuery } from '../features/history/range'
 import type { UptimeCell, UptimeSeries } from '../lib/models'
 import HealthPill from '../components/HealthPill.vue'
+import AppTools from '../components/AppTools.vue'
 import HistoryRange from '../features/history/HistoryRange.vue'
 import UptimeStrip from '../features/history/UptimeStrip.vue'
 interface PublicMonitor {
@@ -69,7 +70,7 @@ const events = computed(() =>
         <p class="eyebrow">{{ t('statusEyebrow') }}</p>
         <h1>{{ data.name }}</h1>
       </div>
-      <span class="status-mark">◉</span>
+      <AppTools />
     </header>
     <div class="status-summary" :class="{ operational: operational && !error }" role="status">
       <span class="status-dot" /><strong>{{
@@ -151,16 +152,14 @@ const events = computed(() =>
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
   padding-bottom: 28px;
   border-bottom: 1px solid var(--line);
 }
 .status-heading h1 {
   margin-bottom: 0;
   font-size: clamp(26px, 5vw, 42px);
-}
-.status-mark {
-  color: var(--teal);
-  font-size: 42px;
 }
 .status-summary {
   display: flex;

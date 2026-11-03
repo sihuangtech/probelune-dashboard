@@ -78,13 +78,23 @@
   width: calc(100% - 218px);
 }
 .topbar {
-  height: 76px;
+  min-height: 76px;
   background: var(--surface);
   border-bottom: 1px solid var(--line);
-  padding: 0 34px;
+  padding: 16px 34px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
+}
+.page-breadcrumb {
+  min-width: 0;
+}
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
 }
 .topbar strong {
   font-size: 12px;
@@ -95,8 +105,18 @@
   gap: 12px;
   align-items: center;
   font-size: 12px;
+  flex-shrink: 0;
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: 20px;
+}
+.account-name {
+  max-width: 14ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .account button {
+  white-space: nowrap;
   border: 0;
   background: transparent;
   color: var(--muted);
@@ -132,8 +152,7 @@
   padding: 21px;
 }
 .stat-card .value {
-  font:
-    32px/1.4 var(--el-font-family);
+  font: 32px/1.4 var(--el-font-family);
   letter-spacing: -1px;
   margin: 9px 0;
   color: #213d46;

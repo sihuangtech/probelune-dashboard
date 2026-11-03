@@ -14,6 +14,8 @@ The web dashboard and mobile client support English, Simplified Chinese, Traditi
 
 ## Web
 
+Language, theme and the GitHub icon are in the page header. The signed-in console places them beside the account; narrow screens use a separate header row. Login and public status pages provide the same controls in their own headers.
+
 1. Edit the matching JSON resource under `web/src/lib/locales` in the dashboard repository.
 2. Vue I18n supplies application messages. Element Plus supplies matching localized controls.
 3. The language choice is stored locally. Unsupported browser languages fall back to English.

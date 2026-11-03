@@ -8,7 +8,7 @@
   --navy: #132c35;
   --el-color-primary: #087f73;
   --el-border-radius-base: 7px;
-  --el-font-family: "Times New Roman", "Songti SC", SimSun, "Noto Serif CJK SC", serif;
+  --el-font-family: 'Times New Roman', 'Songti SC', SimSun, 'Noto Serif CJK SC', serif;
   font-family: var(--el-font-family);
   font-synthesis: none;
   color: var(--ink);
@@ -58,16 +58,14 @@ h3 {
   font-size: 16px;
 }
 pre {
-  font:
-    12px/1.65 var(--el-font-family);
+  font: 12px/1.65 var(--el-font-family);
 }
 small,
 .muted {
   color: var(--muted);
 }
 .eyebrow {
-  font:
-    10px/1.5 var(--el-font-family);
+  font: 10px/1.5 var(--el-font-family);
   letter-spacing: 1.5px;
   color: var(--muted);
 }
@@ -249,16 +247,60 @@ small,
   color: var(--teal);
   padding: 0;
 }
-.language-toggle {
-  position: fixed;
-  bottom: 16px;
-  right: 18px;
+.app-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 8px;
+  width: 296px;
+  max-width: 100%;
+}
+.app-tools select,
+.github-link {
+  height: 34px;
   border: 1px solid var(--line);
-  background: var(--surface);
-  padding: 5px 12px;
   border-radius: 6px;
-  font-size: 11px;
-  z-index: 50;
+  background: var(--surface);
+  color: var(--ink);
+}
+.app-tools select {
+  width: 100%;
+  min-width: 0;
+  padding: 4px 8px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.app-tools select:focus-visible {
+  outline: 3px solid #61cbb6;
+  outline-offset: 3px;
+}
+.github-link {
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+.github-link:hover,
+.app-tools select:hover {
+  border-color: var(--teal);
+}
+.entry-layout,
+.login-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.entry-layout {
+  min-height: 100vh;
+}
+.entry-tools {
+  display: flex;
+  justify-content: flex-end;
+  padding: 24px 32px;
+}
+.entry-layout .boot-screen {
+  flex: 1;
+  min-height: 0;
 }
 .boot-screen {
   display: grid;
@@ -283,24 +325,6 @@ small,
   padding: 2px 6px;
 }
 
-.github-link {
-  position: fixed;
-  bottom: 16px;
-  right: 164px;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  z-index: 50;
-  font-size: 22px;
-}
-.language-toggle {width: 136px; height: 36px;}
-.github-link:focus-visible {outline: 2px solid var(--teal); outline-offset: 2px;}
-
 html.dark {
   --ink: #e0ece9;
   --muted: #a3b8b5;
@@ -317,13 +341,22 @@ html.dark {
   --el-text-color-regular: #c2d3cf;
   --el-border-color: #35464b;
 }
-html.dark .stat-card.primary {background: #163c34;}
-html.dark .health-pill {background: #263a40;}
-html.dark .health-pill.healthy {background: #164b3c; color: #88e4bf;}
-html.dark .health-pill.down, html.dark .health-pill.failed {background: #542e32; color: #ffb3b0;}
-html.dark .el-table {--el-table-header-bg-color:#20353b;--el-table-row-hover-bg-color:#233e43;}
-.global-tools {position:fixed;right:18px;bottom:16px;display:flex;align-items:center;gap:8px;z-index:50;}
-.global-tools .github-link, .global-tools .language-toggle {position:static;}
-.global-tools .language-toggle {width:132px;}
-.theme-toggle {width:106px;height:36px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);padding:4px;font:inherit;font-size:11px;}
-.language-toggle {color:var(--ink);}
+html.dark .stat-card.primary {
+  background: #163c34;
+}
+html.dark .health-pill {
+  background: #263a40;
+}
+html.dark .health-pill.healthy {
+  background: #164b3c;
+  color: #88e4bf;
+}
+html.dark .health-pill.down,
+html.dark .health-pill.failed {
+  background: #542e32;
+  color: #ffb3b0;
+}
+html.dark .el-table {
+  --el-table-header-bg-color: #20353b;
+  --el-table-row-hover-bg-color: #233e43;
+}

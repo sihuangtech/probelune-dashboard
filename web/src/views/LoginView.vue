@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import { api, user } from '../lib/api'
 import type { User } from '../lib/models'
 import { t } from '../lib/i18n'
+import AppTools from '../components/AppTools.vue'
 const props = defineProps<{ initialized: boolean }>()
 const emit = defineEmits<{ signedIn: [] }>()
 const form = reactive({ username: '', password: '', setupToken: '' })
@@ -34,33 +35,38 @@ async function submit() {
       <span class="eyebrow">{{ t('loginEyebrow') }}</span>
       <h1>{{ t('tagline') }}</h1>
       <div class="orbital-map">
-        <span class="orbit o1" /><span class="orbit o2" /><span class="orbit o3" /><b>巡汐</b>
+        <span class="orbit o1" /><span class="orbit o2" /><span class="orbit o3" /><b>{{
+          t('appName')
+        }}</b>
       </div>
       <p>{{ t('nodeHint') }}</p>
     </section>
-    <section class="login-form">
-      <p class="eyebrow">{{ t('loginHeading') }}</p>
-      <h2>{{ t('connect') }}</h2>
-      <p class="muted">{{ t(initialized ? 'login' : 'secureHint') }}</p>
-      <el-form label-position="top" @submit.prevent="submit"
-        ><el-form-item :label="t('username')"
-          ><el-input v-model="form.username" autocomplete="username" /></el-form-item
-        ><el-form-item :label="t('password')"
-          ><el-input
-            v-model="form.password"
-            type="password"
-            show-password
-            :autocomplete="initialized ? 'current-password' : 'new-password'" /></el-form-item
-        ><el-form-item v-if="!initialized" :label="t('setupToken')"
-          ><el-input v-model="form.setupToken" type="password" show-password /></el-form-item
-        ><el-alert v-if="error" :title="error" type="error" :closable="false" /><el-button
-          class="full-width"
-          type="primary"
-          native-type="submit"
-          :loading="busy"
-          >{{ t(initialized ? 'login' : 'setup') }}</el-button
-        ></el-form
-      >
-    </section>
+    <div class="login-panel">
+      <header class="entry-tools"><AppTools /></header>
+      <section class="login-form">
+        <p class="eyebrow">{{ t('loginHeading') }}</p>
+        <h2>{{ t('connect') }}</h2>
+        <p class="muted">{{ t(initialized ? 'login' : 'secureHint') }}</p>
+        <el-form label-position="top" @submit.prevent="submit"
+          ><el-form-item :label="t('username')"
+            ><el-input v-model="form.username" autocomplete="username" /></el-form-item
+          ><el-form-item :label="t('password')"
+            ><el-input
+              v-model="form.password"
+              type="password"
+              show-password
+              :autocomplete="initialized ? 'current-password' : 'new-password'" /></el-form-item
+          ><el-form-item v-if="!initialized" :label="t('setupToken')"
+            ><el-input v-model="form.setupToken" type="password" show-password /></el-form-item
+          ><el-alert v-if="error" :title="error" type="error" :closable="false" /><el-button
+            class="full-width"
+            type="primary"
+            native-type="submit"
+            :loading="busy"
+            >{{ t(initialized ? 'login' : 'setup') }}</el-button
+          ></el-form
+        >
+      </section>
+    </div>
   </div>
 </template>
