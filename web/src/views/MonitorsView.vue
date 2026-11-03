@@ -121,8 +121,9 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
           ><HealthPill :status="row.status" /><small v-if="!row.coverage_complete">
             {{ t('incomplete') }}</small
           >
-          <div class="muted">{{ t('latestLatency') }} {{ latestLatency(row) }}</div>
           <MonitorHistoryPreview :key="row.id" :monitor-id="row.id" /></template></el-table-column
+      ><el-table-column :label="t('latestLatency')" width="120" align="right">
+        <template #default="{ row }">{{ latestLatency(row) }}</template> </el-table-column
       ><el-table-column prop="group" :label="t('group')" /><el-table-column
         :label="t('interval')"
         width="120"
