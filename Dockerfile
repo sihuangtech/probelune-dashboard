@@ -9,6 +9,8 @@ RUN npm run build
 
 FROM golang:1.27.3-alpine3.24 AS server
 WORKDIR /src/server
+RUN apk add --no-cache git ca-certificates
+ENV GONOPROXY=github.com/sihuangtech/probelune-contracts GONOSUMDB=github.com/sihuangtech/probelune-contracts
 COPY server/go.mod server/go.sum ./
 RUN go mod download
 COPY server/ ./

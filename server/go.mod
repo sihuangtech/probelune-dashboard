@@ -6,7 +6,7 @@ toolchain go1.27.3
 
 require (
 	github.com/gin-gonic/gin v1.12.0
-	github.com/sihuangtech/probelune-contracts v0.1.0-compat
+	github.com/sihuangtech/probelune-contracts v0.1.0
 	golang.org/x/crypto v0.58.0
 	golang.org/x/oauth2 v0.37.0
 	modernc.org/sqlite v1.61.0

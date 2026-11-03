@@ -92,3 +92,5 @@ GPL-3.0-or-later; see [LICENSE](LICENSE). Review the validation record before re
 - Developer: [Snake Konginchrist](https://github.com/Snake-Konginchrist)
 - Email: [developer@skstudio.cn](mailto:developer@skstudio.cn)
 - Feedback: [GitHub Issues](https://github.com/sihuangtech/probelune-dashboard/issues)
+
+For the republished contracts `v0.1.0`, run `. ./scripts/go-env.sh` from this repository root before manual Go commands. Build scripts, CI and Docker scope direct fetching and checksum-database bypass to this module; other modules retain normal verification.
