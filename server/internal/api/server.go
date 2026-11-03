@@ -148,7 +148,7 @@ func (s *Server) Router(web string) *gin.Engine {
 		}
 		c.Next()
 	})
-	r.GET("/healthz", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok", "version": "0.1.0"}) })
+	r.GET("/healthz", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok", "version": "0.1.1"}) })
 	s.authRoutes(r)
 	s.nodeRoutes(r)
 	v := r.Group("/api/v1", s.authenticate)

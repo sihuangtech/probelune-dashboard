@@ -70,7 +70,7 @@ UDP 检测支持 UTF-8/HEX 请求与可选响应内容断言，必须收到非�
 
 ## 本地开发
 
-手动执行 Go 命令前，在仓库根目录运行 `. ./scripts/go-env.sh`；构建脚本、CI 和容器会自动配置模块环境。
+手动执行 Go 命令前，在仓库根目录运行 `. ./scripts/go-env.sh`。
 
 开发网页时，先启动 8080 后端，再在 `web/` 执行 `npm ci` 和 `npm run dev`。Vite 将 API 请求代理到后端。完整双终端命令见 [开发文档](docs/ARCHITECTURE.md#developer-loop)。
 

@@ -76,7 +76,7 @@ UDP checks use UTF-8 or HEX payloads and optional response-content assertions. T
 
 ## Development
 
-Run `. ./scripts/go-env.sh` from the repository root before manual Go commands. Build scripts, CI and containers configure the module environment automatically.
+Source `. ./scripts/go-env.sh` from the repository root before manual Go commands.
 
 For live web development, run the Go server on port 8080, then run `npm ci` and `npm run dev` from `web/` in a second terminal. Vite proxies `/api` to the backend. See the [development guide](docs/ARCHITECTURE.md#developer-loop) for the full commands.
 

@@ -61,9 +61,9 @@ function instruction() {
   const args = `--panel '${location.origin}' --node-id '${n.node.id}'${location.protocol === 'http:' ? ' --allow-http' : ''}`
   const token = `export PROBELUNE_REGISTER_TOKEN='${n.registration_token}'`
   if (installMethod.value === 'docker')
-    return `docker build -t probelune-node:0.1.0 https://github.com/sihuangtech/probelune-node.git#v0.1.0\n${token}\ndocker run -d --name probelune-node --restart unless-stopped --cap-drop ALL --cap-add NET_RAW -e PROBELUNE_REGISTER_TOKEN -v probelune-node-data:/data probelune-node:0.1.0 ${args} --data /data\nunset PROBELUNE_REGISTER_TOKEN`
+    return `docker build -t probelune-node:0.1.1 https://github.com/sihuangtech/probelune-node.git#v0.1.1\n${token}\ndocker run -d --name probelune-node --restart unless-stopped --cap-drop ALL --cap-add NET_RAW -e PROBELUNE_REGISTER_TOKEN -v probelune-node-data:/data probelune-node:0.1.1 ${args} --data /data\nunset PROBELUNE_REGISTER_TOKEN`
   const binary = `probelune-node-${platform.value}`
-  return `(\nset -eu\ncurl -fLO https://github.com/sihuangtech/probelune-node/releases/download/v0.1.0/${binary}\ncurl -fLO https://github.com/sihuangtech/probelune-node/releases/download/v0.1.0/SHA256SUMS\nsha256sum --ignore-missing -c SHA256SUMS\nchmod +x ${binary}\n${token}\n./${binary} ${args} --data ./node-data\nunset PROBELUNE_REGISTER_TOKEN\n)`
+  return `(\nset -eu\ncurl -fLO https://github.com/sihuangtech/probelune-node/releases/download/v0.1.1/${binary}\ncurl -fLO https://github.com/sihuangtech/probelune-node/releases/download/v0.1.1/SHA256SUMS\nsha256sum --ignore-missing -c SHA256SUMS\nchmod +x ${binary}\n${token}\n./${binary} ${args} --data ./node-data\nunset PROBELUNE_REGISTER_TOKEN\n)`
 }
 async function copyCommand() {
   try {
