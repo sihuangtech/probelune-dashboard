@@ -47,7 +47,6 @@ const references: Record<string, [string, string]> = {
 }
 .check-introduction p {
   margin: 10px 0;
-  max-width: 90ch;
   color: var(--muted);
   line-height: 1.85;
   font-size: 13px;

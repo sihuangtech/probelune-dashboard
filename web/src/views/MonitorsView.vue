@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { endpoint } from '../lib/endpoint'
 import { computed, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { api, canEdit, usePolling } from '../lib/api'
@@ -52,6 +53,11 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
   <el-alert v-if="error" :title="error" type="error" :closable="false" />
   <div class="panel">
     <MonitorTypeFilter :monitors="data" />
+    <el-button
+      v-if="canEdit && monitorType && !data.some((m) => m.check.type === monitorType)"
+      @click="edit()"
+      >+ {{ t('add') }} {{ monitorType.toUpperCase() }}</el-button
+    >
     <div class="toolbar">
       <el-input v-model="search" :placeholder="t('search')" clearable /><el-select
         v-model="filter"
@@ -80,10 +86,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
             ><strong>{{ row.name }}</strong></router-link
           >
           <div class="muted">
-            {{ row.check.target
-            }}<template v-if="['tcp', 'udp'].includes(row.check.type)">
-              : {{ row.check.port }}</template
-            >
+            {{ endpoint(row.check) }}
           </div></template
         ></el-table-column
       ><el-table-column :label="t('monitorStatus')" width="190"
@@ -118,10 +121,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
             ><strong>{{ m.name }}</strong></router-link
           ><HealthPill :status="m.status" />
         </div>
-        <p>
-          {{ m.group }} · {{ m.check.target
-          }}<template v-if="['tcp', 'udp'].includes(m.check.type)">:{{ m.check.port }}</template>
-        </p>
+        <p>{{ m.group }} · {{ endpoint(m.check) }}</p>
         <div v-if="canEdit" class="actions">
           <el-button size="small" @click="edit(m)">{{ t('edit') }}</el-button
           ><el-button size="small" @click="edit(m, true)">{{ t('copy') }}</el-button

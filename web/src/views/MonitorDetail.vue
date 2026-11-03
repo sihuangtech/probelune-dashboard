@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { endpoint } from '../lib/endpoint'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -32,7 +33,7 @@ async function recheck() {
     <div>
       <router-link to="/monitors">← {{ t('monitors') }}</router-link>
       <h1 style="margin-top: 12px">{{ monitor?.name }}</h1>
-      <p class="muted mono">{{ monitor?.check.target }}</p>
+      <p class="muted mono">{{ monitor ? endpoint(monitor.check) : '' }}</p>
     </div>
     <div class="actions" v-if="canEdit">
       <el-button @click="editor = true">{{ t('edit') }}</el-button

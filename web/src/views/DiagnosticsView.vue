@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { endpoint } from '../lib/endpoint'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api, canEdit, usePolling, download, date } from '../lib/api'
@@ -152,7 +153,7 @@ function exportData(format: string) {
         <strong>{{ nodes.find((n) => n.id === item.job.node_id)?.name || item.job.node_id }}</strong
         ><HealthPill :status="item.job.status" />
       </div>
-      <p class="mono">{{ item.job.check.type.toUpperCase() }} · {{ item.job.check.target }}</p>
+      <p class="mono">{{ item.job.check.type.toUpperCase() }} · {{ endpoint(item.job.check) }}</p>
       <small>{{ date(item.job.created_at) }}</small
       ><ResultCard v-if="item.result?.id" :result="item.result" :label="t('output')" /><el-button
         v-if="canEdit && ['queued', 'running'].includes(item.job.status)"

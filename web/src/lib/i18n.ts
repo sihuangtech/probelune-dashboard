@@ -3,6 +3,12 @@ export const language = ref(
   localStorage.getItem('probelune-language') || (navigator.language.startsWith('zh') ? 'zh' : 'en'),
 )
 const messages: Record<string, [string, string]> = {
+  serverHealth: ['服务器状态', 'Server health'],
+  otherTargets: ['其他监测目标', 'Other monitored targets'],
+  panelHealth: ['面板状态', 'Panel health'],
+  heartbeat: ['节点心跳', 'Node heartbeat'],
+  noChecks: ['暂无检测', 'No checks'],
+  mixedHealth: ['部分检测异常', 'Some checks failing'],
   targetResults: ['检测结果', 'Check results'],
   monitorStatus: ['状态', 'Status'],
   allStatuses: ['全部状态', 'All statuses'],
@@ -149,7 +155,7 @@ const messages: Record<string, [string, string]> = {
   nodeConnected: ['节点已连接，可以创建监测。', 'Node connected. You can create a monitor now.'],
 
   overview: ['总览', 'Overview'],
-  monitors: ['监测', 'Monitors'],
+  monitors: ['监测管理', 'Monitor management'],
   nodes: ['节点服务器', 'Servers'],
   diagnostics: ['即时诊断', 'Diagnostics'],
   incidents: ['故障事件', 'Incidents'],
