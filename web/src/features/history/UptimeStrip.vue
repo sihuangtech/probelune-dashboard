@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { UptimeCell, UptimeSeries } from '../../lib/models'
 import { date, number } from '../../lib/api'
 import { t } from '../../lib/i18n'
@@ -6,6 +7,18 @@ defineProps<{ series: UptimeSeries; label?: string; compact?: boolean }>()
 const emit = defineEmits<{ select: [cell: UptimeCell] }>()
 const description = (cell: UptimeCell) =>
   `${date(cell.at)} – ${date(cell.end)}\n${t('uptime_' + cell.status)}\n${t('availability')}: ${number(cell.availability, '%')} / ${t('coverage')}: ${number(cell.coverage, '%')}\n${t('success')}: ${cell.success}, ${t('failure')}: ${cell.failed}, ${t('error')}: ${cell.errors}`
+const hover = ref<{ cell: UptimeCell; x: number; y: number }>()
+function show(event: Event, cell: UptimeCell) {
+  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  const width = Math.min(280, window.innerWidth - 16)
+  hover.value = {
+    cell,
+    x: Math.max(8, Math.min(rect.left, window.innerWidth - width - 8)),
+    y: rect.top > 100 ? rect.top - 8 : rect.bottom + 8,
+  }
+  above.value = rect.top > 100
+}
+const above = ref(false)
 </script>
 <template>
   <div v-if="compact" class="preview">
@@ -13,7 +26,8 @@ const description = (cell: UptimeCell) =>
       v-for="cell in series.cells.slice(-24)"
       :key="cell.at"
       :class="cell.status"
-      :title="description(cell)"
+      @mouseenter="show($event, cell)"
+      @mouseleave="hover = undefined"
     />
   </div>
   <div v-else class="uptime-history">
@@ -30,8 +44,12 @@ const description = (cell: UptimeCell) =>
         :key="cell.at"
         type="button"
         :class="cell.status"
-        :title="description(cell)"
+        @mouseenter="show($event, cell)"
+        @mouseleave="hover = undefined"
         :aria-label="description(cell)"
+        @focus="show($event, cell)"
+        @blur="hover = undefined"
+        @keydown.esc="hover = undefined"
         @click="emit('select', cell)"
       />
     </div>
@@ -45,8 +63,43 @@ const description = (cell: UptimeCell) =>
       >
     </div>
   </div>
+  <Teleport to="body">
+    <div
+      v-if="hover"
+      class="bucket-tooltip"
+      role="tooltip"
+      :style="{
+        left: hover.x + 'px',
+        top: hover.y + 'px',
+        transform: above ? 'translateY(-100%)' : undefined,
+      }"
+    >
+      <strong>{{ date(hover.cell.at) }} – {{ date(hover.cell.end) }}</strong>
+      <div>
+        {{ t('uptime_' + hover.cell.status) }} · {{ t('coverage') }}
+        {{ number(hover.cell.coverage, '%') }}
+      </div>
+    </div>
+  </Teleport>
 </template>
 <style scoped>
+.bucket-tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 4000;
+  box-sizing: border-box;
+  width: min(280px, calc(100vw - 16px));
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: white;
+  background: #17343b;
+  font-size: 13px;
+}
+.bucket-tooltip strong {
+  color: inherit;
+  margin: 0;
+}
+
 .preview {
   display: flex;
   gap: 2px;
