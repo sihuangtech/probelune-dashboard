@@ -21,6 +21,7 @@ type Pair struct {
 }
 type Node struct {
 	ID              string   `json:"id"`
+	Role            string   `json:"role,omitempty"`
 	Name            string   `json:"name"`
 	Region          string   `json:"region"`
 	Network         string   `json:"network"`

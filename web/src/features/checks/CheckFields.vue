@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Check } from '../../lib/models'
 import { t } from '../../lib/i18n'
-import { useCheckCatalog } from './catalog'
+import { checkTypeLabel, useCheckCatalog } from './catalog'
+import CheckIntroduction from './CheckIntroduction.vue'
 const model = defineModel<Check>({ required: true })
 defineProps<{ diagnostic?: boolean }>()
 const { definitions, catalogError } = useCheckCatalog()
@@ -15,11 +16,12 @@ const { definitions, catalogError } = useCheckCatalog()
           v-for="kind in definitions.filter((item) => diagnostic || item.continuous)"
           :key="kind.type"
           :value="kind.type"
-          :label="kind.type.toUpperCase()" /></el-select></el-form-item
+          :label="checkTypeLabel(kind.type)" /></el-select></el-form-item
     ><el-form-item :label="t('timeout')"
       ><el-input-number v-model="model.timeout" :min="1" :max="60"
     /></el-form-item>
   </div>
+  <CheckIntroduction :type="model.type" />
   <el-form-item :label="t('target')"
     ><el-input
       v-model="model.target"

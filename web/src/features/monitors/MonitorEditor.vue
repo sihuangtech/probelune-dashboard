@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { api, isAdmin, clone } from '../../lib/api'
 import type { Monitor, Node, Channel } from '../../lib/models'
@@ -8,7 +8,7 @@ import { t } from '../../lib/i18n'
 import CheckFields from '../checks/CheckFields.vue'
 import { supportsCheck } from '../checks/catalog'
 const visible = defineModel<boolean>({ required: true })
-const props = defineProps<{ monitor?: Monitor; nodes: Node[] }>()
+const props = defineProps<{ monitor?: Monitor; nodes: Node[]; defaultType?: string }>()
 const emit = defineEmits<{ saved: [] }>()
 const model = ref(defaultMonitor()),
   headers = ref(''),
@@ -16,9 +16,12 @@ const model = ref(defaultMonitor()),
   error = ref(''),
   busy = ref(false)
 const channels = ref<Channel[]>([])
+const panel = computed(() => props.nodes.find((node) => node.role === 'panel' && !node.revoked))
 watch(visible, async (opened) => {
   if (!opened) return
   model.value = props.monitor ? clone(props.monitor) : defaultMonitor()
+  if (!props.monitor && props.defaultType) model.value.check.type = props.defaultType
+  if (!props.monitor && panel.value) model.value.node_ids = [panel.value.id]
   headers.value = ''
   tags.value = (model.value.tags || []).join(', ')
   error.value = ''
@@ -30,6 +33,10 @@ async function save() {
   error.value = ''
   try {
     const m = clone(model.value)
+    if (panel.value) {
+      m.node_ids = [panel.value.id]
+      m.min_failed_nodes = 1
+    }
     m.tags = tags.value
       .split(',')
       .map((x) => x.trim())
@@ -63,7 +70,8 @@ async function save() {
       <el-form-item v-if="model.check.type === 'http'" :label="t('headers')"
         ><el-input v-model="headers" type="textarea" placeholder='{"Authorization":"Bearer …"}'
       /></el-form-item>
-      <el-form-item :label="t('nodeChoice')"
+      <p v-if="panel" class="muted">{{ t('probeSource') }}：{{ panel.name }}</p>
+      <el-form-item v-else :label="t('nodeChoice')"
         ><el-select v-model="model.node_ids" multiple class="full-width"
           ><el-option
             v-for="node in nodes.filter((n) => !n.revoked)"
@@ -76,7 +84,7 @@ async function save() {
       <div class="grid-two">
         <el-form-item :label="t('interval')"
           ><el-input-number v-model="model.interval" :min="15" :max="86400" /></el-form-item
-        ><el-form-item :label="t('minFailed')"
+        ><el-form-item v-if="!panel" :label="t('minFailed')"
           ><el-input-number v-model="model.min_failed_nodes" :min="1" :max="50" /></el-form-item
         ><el-form-item :label="t('failThreshold')"
           ><el-input-number v-model="model.fail_threshold" :min="1" :max="20" /></el-form-item

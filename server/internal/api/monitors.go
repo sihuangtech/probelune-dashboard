@@ -46,6 +46,10 @@ func (s *Server) saveMonitor(c *gin.Context) {
 		m.ID = ID()
 		m.Version = 1
 	}
+	if panel := s.panelExecutor(); panel != "" {
+		m.NodeIDs = []string{panel}
+		m.MinFailedNodes = 1
+	}
 	if err := m.Check.Validate(); err != nil {
 		fail(c, 400, err.Error())
 		return

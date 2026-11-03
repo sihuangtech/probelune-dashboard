@@ -6,8 +6,9 @@
 
 ## Features
 
+- Filter the overview and monitor list by TCP, UDP, ICMP, HTTP/HTTPS or DNS, with a short explanation of what each check measures. Type selection is shared between pages and remembered in the browser; monitor searches and status filters can be combined with it.
 - HTTP/HTTPS, TCP, UDP, ICMP and DNS monitoring with explicit node assignment, groups, tags, versioned configuration, pause and archive.
-- Location matrix, availability **and** coverage, raw evidence, certificate validity, timing and configurable availability history.
+- Target status, availability **and** coverage, raw evidence, certificate validity, timing and configurable availability history.
 - Consecutive failure/recovery confirmation; node outages remain separate from target failures.
 - Run-based multi-location diagnostics including MTR/traceroute, cancellation, and redacted JSON/CSV exports.
 - Searchable history with time, node, result and failure-stage filters and pagination.
@@ -55,6 +56,8 @@ Open `http://localhost:8080`, enter the one-time setup token, and create an admi
 The Dockerfiles specify the verified stable patches: Node.js **26.12.1**, Go **1.27.3**, and Alpine **3.24.3**. See the [dependency record](docs/DEPENDENCIES.md) for sources and refresh commands.
 
 ## Configure monitoring
+
+When a node with the `panel` role is registered on the dashboard host, continuous checks and new diagnostics run from that host. The overview shows target status, latency and last-check time. Remote nodes remain available for heartbeat reporting.
 
 1. In **Settings**, set your externally reachable HTTPS instance URL and display timezone.
 2. In **Nodes**, create a node and copy its ten-minute, single-use registration token.

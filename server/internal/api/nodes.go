@@ -25,6 +25,14 @@ func (s *Server) nodeAuth(c *gin.Context) {
 	c.Set("node_id", id)
 }
 func publicNode(n model.Node) model.Node { n.TokenHash = ""; n.RegisterHash = ""; return n }
+func (s *Server) panelExecutor() string {
+	for _, n := range all[model.Node](s, "node") {
+		if n.Role == "panel" && !n.Revoked {
+			return n.ID
+		}
+	}
+	return ""
+}
 func (s *Server) nodes(c *gin.Context) {
 	out := []model.Node{}
 	for _, n := range all[model.Node](s, "node") {
@@ -43,12 +51,27 @@ func (s *Server) createNode(c *gin.Context) {
 		fail(c, 400, "节点名称不能为空且最多 100 字符")
 		return
 	}
+	if n.Role == "" {
+		n.Role = "node"
+	}
+	if n.Role != "node" && n.Role != "panel" {
+		fail(c, 400, "节点角色无效")
+		return
+	}
+	if n.Role == "panel" {
+		for _, existing := range all[model.Node](s, "node") {
+			if existing.Role == "panel" && !existing.Revoked {
+				fail(c, 409, "面板探测端已存在")
+				return
+			}
+		}
+	}
 	if err := n.Policy.Validate(); err != nil {
 		fail(c, 400, err.Error())
 		return
 	}
 	code := ID()
-	n = model.Node{ID: ID(), Name: n.Name, Region: n.Region, Network: n.Network, Enabled: true, Policy: n.Policy, CreatedAt: Now(), RegisterHash: Hash(code), RegisterExpires: Now() + 600}
+	n = model.Node{ID: ID(), Role: n.Role, Name: n.Name, Region: n.Region, Network: n.Network, Enabled: true, Policy: n.Policy, CreatedAt: Now(), RegisterHash: Hash(code), RegisterExpires: Now() + 600}
 	if s.save(c, "node", n.ID, n) {
 		s.audit(c, "node.create", n.ID)
 		c.JSON(201, gin.H{"node": publicNode(n), "registration_token": code, "expires": n.RegisterExpires})

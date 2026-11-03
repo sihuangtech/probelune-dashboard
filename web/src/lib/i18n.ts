@@ -3,6 +3,68 @@ export const language = ref(
   localStorage.getItem('probelune-language') || (navigator.language.startsWith('zh') ? 'zh' : 'en'),
 )
 const messages: Record<string, [string, string]> = {
+  allTypes: ['全部类型', 'All types'],
+  noTypeMonitors: ['此类型暂无匹配的监测', 'No matching monitors of this type'],
+  filteredMonitors: ['当前筛选', 'Filtered monitors'],
+  probeSource: ['探测来源', 'Probe source'],
+  panelOverviewHint: [
+    '由面板机发起检测，按类型查看目标服务器的状态与历史。',
+    'Checks originate from the panel server. Browse target server status and history by type.',
+  ],
+  probeNodes: ['节点服务器', 'Node servers'],
+  panelSourceHint: [
+    '面板机负责发起检测，节点服务器提供在线状态与被测服务。',
+    'The panel originates checks; node servers provide heartbeats and target services.',
+  ],
+  checkIntro_all: [
+    '选择一种探测类型，了解对应协议并查看检测结果。',
+    'Select a check type to learn about its protocol and view results.',
+  ],
+  checkIntro_tcp: [
+    'TCP（Transmission Control Protocol，传输控制协议）提供面向连接、可靠且有序的字节流传输，通过确认、重传等机制处理数据丢失。TCP 探测检查目标端口能否建立连接及连接耗时。',
+    'TCP (Transmission Control Protocol) provides a connection-oriented, reliable, ordered byte stream using acknowledgements and retransmissions. TCP checks measure whether a target port accepts a connection and how long it takes.',
+  ],
+  checkIntro_udp: [
+    'UDP（User Datagram Protocol，用户数据报协议）以无连接的数据报方式传输消息，协议本身不保证送达或顺序，常用于 DNS、实时音视频等场景。UDP 探测发送指定数据并等待响应。',
+    'UDP (User Datagram Protocol) sends connectionless datagrams without guaranteeing delivery or ordering. It is used by DNS and real-time media applications. UDP checks send a payload and wait for a reply.',
+  ],
+  checkIntro_ping: [
+    'ICMP（Internet Control Message Protocol，互联网控制报文协议）用于传递 IP 网络的错误和控制信息。Ping 利用其回显请求与应答测量往返延迟和丢包率；是否回应也受防火墙策略影响。',
+    'ICMP (Internet Control Message Protocol) carries error and control information for IP networks. Ping uses echo requests and replies to measure round-trip latency and loss; firewall policies can affect replies.',
+  ],
+  checkIntro_http: [
+    'HTTP（Hypertext Transfer Protocol，超文本传输协议）通过请求与响应交换网页、API 等资源。HTTPS 使用 TLS 保护 HTTP 通信并验证服务端身份。此类探测检查响应状态、内容、耗时及证书。',
+    'HTTP (Hypertext Transfer Protocol) exchanges web and API resources through requests and responses. HTTPS protects HTTP with TLS and authenticates the server. These checks examine response status, content, timing and certificates.',
+  ],
+  checkIntro_dns: [
+    'DNS（Domain Name System，域名系统）是一套分布式命名系统，用于查询域名对应的 IP 地址、邮件服务器等资源记录，传统查询通常使用 UDP 或 TCP 的 53 端口。DNS 探测检查解析结果和查询耗时。',
+    'DNS (Domain Name System) is a distributed naming system for records such as IP addresses and mail servers. Traditional queries use UDP or TCP port 53. DNS checks inspect answers and query time.',
+  ],
+  checkIntro_mtr: [
+    'MTR 是结合路由追踪与连续 Ping 的网络诊断工具，展示到目标路径上各跳的响应、延迟和丢包情况。它不是独立的通信协议；中间路由器的应答限制可能影响显示结果。',
+    'MTR combines route tracing and repeated probes to report replies, latency and loss along a path. It is a diagnostic tool, not a separate protocol; router reply limits can affect its output.',
+  ],
+  checkIntro_traceroute: [
+    'Traceroute 是路由追踪工具，通过逐步增加 IP 报文的生存时间（TTL）并分析返回报文推断路径。它不是独立的通信协议，工具可使用 UDP、ICMP 或 TCP 发送探测。',
+    'Traceroute infers a route by increasing the IP time-to-live (TTL) and examining replies. It is a diagnostic tool, not a separate protocol, and can use UDP, ICMP or TCP probes.',
+  ],
+  protocolName_tcp: ['TCP - 传输控制协议', 'TCP - Transmission Control Protocol'],
+  protocolName_udp: ['UDP - 用户数据报协议', 'UDP - User Datagram Protocol'],
+  protocolName_ping: ['ICMP - 互联网控制报文协议', 'ICMP - Internet Control Message Protocol'],
+  protocolName_http: [
+    'HTTP / HTTPS - 超文本传输协议',
+    'HTTP / HTTPS - Hypertext Transfer Protocol',
+  ],
+  protocolName_dns: ['DNS - 域名系统', 'DNS - Domain Name System'],
+  protocolName_mtr: ['MTR - 路由诊断工具', 'MTR - Route diagnostics'],
+  protocolName_traceroute: ['Traceroute - 路由追踪工具', 'Traceroute - Route tracing'],
+  protocolLayer_tcp: ['传输层（OSI 第 4 层）', 'Transport layer (OSI layer 4)'],
+  protocolLayer_udp: ['传输层（OSI 第 4 层）', 'Transport layer (OSI layer 4)'],
+  protocolLayer_ping: ['网络层（OSI 第 3 层）', 'Network layer (OSI layer 3)'],
+  protocolLayer_http: ['应用层（OSI 第 7 层）', 'Application layer (OSI layer 7)'],
+  protocolLayer_dns: ['应用层（OSI 第 7 层）', 'Application layer (OSI layer 7)'],
+  protocolLayer_mtr: ['诊断工具', 'Diagnostic tool'],
+  protocolLayer_traceroute: ['诊断工具', 'Diagnostic tool'],
   udpHint: [
     '发送成功不代表服务可用；必须收到响应才算成功。无响应不能证明端口关闭。',
     'A successful send is not a health check. A response is required; no response does not prove the port is closed.',
@@ -85,12 +147,12 @@ const messages: Record<string, [string, string]> = {
 
   overview: ['总览', 'Overview'],
   monitors: ['监测', 'Monitors'],
-  nodes: ['探测节点', 'Nodes'],
+  nodes: ['节点服务器', 'Servers'],
   diagnostics: ['即时诊断', 'Diagnostics'],
   incidents: ['故障事件', 'Incidents'],
   alerts: ['告警与维护', 'Alerts & maintenance'],
   settings: ['设置', 'Settings'],
-  tagline: ['从不同地点，看清每一次波动。', 'A clear signal. From every vantage point.'],
+  tagline: ['集中检测，清晰掌握服务状态。', 'Central checks. Clear service status.'],
   live: ['实时观测', 'LIVE OBSERVATIONS'],
   healthy: ['正常', 'Healthy'],
   failed: ['检查失败', 'Failed'],

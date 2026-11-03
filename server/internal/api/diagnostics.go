@@ -30,6 +30,9 @@ func (s *Server) createJobs(c *gin.Context) {
 			in.NodeIDs = m.NodeIDs
 		}
 	}
+	if panel := s.panelExecutor(); panel != "" {
+		in.NodeIDs = []string{panel}
+	}
 	if err := in.Check.Validate(); err != nil {
 		fail(c, 400, err.Error())
 		return

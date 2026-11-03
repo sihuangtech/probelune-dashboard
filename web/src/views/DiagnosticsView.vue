@@ -23,6 +23,7 @@ const query = computed(() =>
   ).toString(),
 )
 const { data: nodes } = usePolling<Node[]>(() => '/nodes', [])
+const panel = computed(() => nodes.value.find((node) => node.role === 'panel' && !node.revoked))
 const {
   data: jobs,
   error,
@@ -105,7 +106,9 @@ function exportData(format: string) {
   <el-alert v-if="error || failure" :title="error || failure" type="error" :closable="false" />
   <div class="panel" v-if="canEdit">
     <el-form label-position="top" @submit.prevent="submit"
-      ><CheckFields v-model="check" diagnostic /><el-form-item :label="t('nodeChoice')"
+      ><CheckFields v-model="check" diagnostic />
+      <p v-if="panel" class="muted">{{ t('probeSource') }}：{{ panel.name }}</p>
+      <el-form-item v-else :label="t('nodeChoice')"
         ><el-select v-model="nodeIDs" multiple class="full-width"
           ><el-option
             v-for="node in nodes.filter((n) => n.enabled && !n.revoked)"

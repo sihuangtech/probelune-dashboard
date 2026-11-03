@@ -6,6 +6,8 @@ import type { Monitor, Node } from '../lib/models'
 import { t } from '../lib/i18n'
 import HealthPill from '../components/HealthPill.vue'
 import MonitorEditor from '../features/monitors/MonitorEditor.vue'
+import MonitorTypeFilter from '../features/monitors/MonitorTypeFilter.vue'
+import { monitorType } from '../features/monitors/typeFilter'
 const { data, error, reload } = usePolling<Monitor[]>(() => '/monitors', [])
 const { data: nodes } = usePolling<Node[]>(() => '/nodes', [])
 const search = ref(''),
@@ -15,6 +17,7 @@ const search = ref(''),
 const visible = computed(() =>
   data.value.filter(
     (m) =>
+      (!monitorType.value || m.check.type === monitorType.value) &&
       (!filter.value || m.status === filter.value) &&
       `${m.name} ${m.check.target} ${m.group}`.toLowerCase().includes(search.value.toLowerCase()),
   ),
@@ -48,6 +51,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
   </div>
   <el-alert v-if="error" :title="error" type="error" :closable="false" />
   <div class="panel">
+    <MonitorTypeFilter :monitors="data" />
     <div class="toolbar">
       <el-input v-model="search" :placeholder="t('search')" clearable /><el-select
         v-model="filter"
@@ -68,13 +72,18 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
           :label="t(status)"
       /></el-select>
     </div>
-    <el-table :data="visible"
+    <el-table :data="visible" :empty-text="t('noTypeMonitors')"
       ><el-table-column :label="t('name')" min-width="200"
         ><template #default="{ row }"
           ><router-link :to="'/monitors/' + row.id"
             ><strong>{{ row.name }}</strong></router-link
           >
-          <div class="muted">{{ row.check.target }}</div></template
+          <div class="muted">
+            {{ row.check.target
+            }}<template v-if="['tcp', 'udp'].includes(row.check.type)">
+              : {{ row.check.port }}</template
+            >
+          </div></template
         ></el-table-column
       ><el-table-column :label="t('overview')" width="190"
         ><template #default="{ row }"
@@ -102,5 +111,11 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
       ></el-table
     >
   </div>
-  <MonitorEditor v-model="editor" :monitor="selected" :nodes="nodes" @saved="reload" />
+  <MonitorEditor
+    v-model="editor"
+    :monitor="selected"
+    :nodes="nodes"
+    :default-type="monitorType || undefined"
+    @saved="reload"
+  />
 </template>

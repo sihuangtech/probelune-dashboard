@@ -67,6 +67,7 @@ export interface Monitor {
 }
 export interface Node {
   id: string
+  role?: 'panel' | 'node'
   name: string
   region: string
   network: string

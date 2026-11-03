@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { api, date, usePolling, isAdmin } from '../lib/api'
 import type { Node } from '../lib/models'
 import { t } from '../lib/i18n'
 import HealthPill from '../components/HealthPill.vue'
 const { data, error, reload } = usePolling<Node[]>(() => '/nodes', [])
+const targets = computed(() => data.value.filter((node) => node.role !== 'panel'))
+const panel = computed(() => data.value.find((node) => node.role === 'panel' && !node.revoked))
 const open = ref(false),
   form = ref({ id: '', name: '', region: '', network: '', enabled: true }),
   cidrs = ref(''),
@@ -77,20 +79,23 @@ async function copyCommand() {
 <template>
   <div class="page-title">
     <div>
-      <p class="eyebrow">YOUR VANTAGE POINTS</p>
+      <p class="eyebrow">SERVERS</p>
       <h1>{{ t('nodes') }}</h1>
       <p class="muted">{{ t('nodeHint') }}</p>
     </div>
     <el-button v-if="isAdmin" type="primary" @click="edit()">+ {{ t('add') }}</el-button>
   </div>
   <el-alert v-if="error" :title="error" type="error" :closable="false" />
-  <div v-if="!data.length" class="panel empty-state">
+  <p v-if="panel" class="muted">
+    {{ t('probeSource') }}：{{ panel.name }} · {{ t(online(panel) ? 'online' : 'offline') }}
+  </p>
+  <div v-if="!targets.length" class="panel empty-state">
     <div class="empty-symbol">◎</div>
     <h3>{{ t('empty') }}</h3>
     <p>{{ t('noNodes') }}</p>
   </div>
   <div class="node-grid">
-    <article v-for="node in data" :key="node.id" class="node-card">
+    <article v-for="node in targets" :key="node.id" class="node-card">
       <div class="section-title">
         <h3>{{ node.name }}</h3>
         <HealthPill
