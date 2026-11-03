@@ -7,7 +7,7 @@
   --navy: #132c35;
   --el-color-primary: #087f73;
   --el-border-radius-base: 7px;
-  --el-font-family: 'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --el-font-family: "Times New Roman", "Songti SC", SimSun, "Noto Serif CJK SC", serif;
   font-family: var(--el-font-family);
   font-synthesis: none;
   color: var(--ink);
@@ -244,7 +244,7 @@ small,
   margin-bottom: 16px;
 }
 .mono {
-  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-family: var(--el-font-family);
 }
 .link-button {
   border: 0;
