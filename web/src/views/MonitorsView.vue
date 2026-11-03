@@ -3,7 +3,7 @@ import { endpoint } from '../lib/endpoint'
 import MonitorHistoryPreview from '../features/history/MonitorHistoryPreview.vue'
 import { computed, ref, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { api, canEdit, usePolling } from '../lib/api'
+import { api, canEdit, number, usePolling } from '../lib/api'
 import type { Monitor, Node } from '../lib/models'
 import { t } from '../lib/i18n'
 import HealthPill from '../components/HealthPill.vue'
@@ -31,6 +31,20 @@ const visible = computed(() =>
       `${m.name} ${m.check.target} ${m.group}`.toLowerCase().includes(search.value.toLowerCase()),
   ),
 )
+function latestLatency(monitor: Monitor) {
+  const latest = monitor.states.reduce<Monitor['states'][number] | undefined>(
+    (last, state) => (!last || state.last_at > last.last_at ? state : last),
+    undefined,
+  )?.result
+  if (!latest) return '—'
+  if (monitor.check.type === 'ping') {
+    const stats = latest.data
+    return typeof stats?.avg_ms === 'number' && Number(stats.received) > 0
+      ? number(stats.avg_ms, ' ms')
+      : '—'
+  }
+  return latest.status === 'success' ? number(latest.latency_ms, ' ms') : '—'
+}
 function edit(m?: Monitor, copy = false) {
   selected.value = m ? JSON.parse(JSON.stringify(m)) : undefined
   if (copy && selected.value) {
@@ -107,6 +121,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
           ><HealthPill :status="row.status" /><small v-if="!row.coverage_complete">
             {{ t('incomplete') }}</small
           >
+          <div class="muted">{{ t('latestLatency') }} {{ latestLatency(row) }}</div>
           <MonitorHistoryPreview :key="row.id" :monitor-id="row.id" /></template></el-table-column
       ><el-table-column prop="group" :label="t('group')" /><el-table-column
         :label="t('interval')"
@@ -134,6 +149,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
             ><strong>{{ m.name }}</strong></router-link
           ><HealthPill :status="m.status" />
         </div>
+        <div class="muted">{{ t('latestLatency') }} {{ latestLatency(m) }}</div>
         <MonitorHistoryPreview :monitor-id="m.id" />
         <p>{{ m.group }} · {{ endpoint(m.check) }}</p>
         <div v-if="canEdit" class="actions">
