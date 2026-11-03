@@ -66,7 +66,7 @@ github.com/quic-go/quic-go v0.64.1 h1:BCNTP+6x6++OPKrGST2FR3f1tycx8O3QOA3QQv09g7
 github.com/quic-go/quic-go v0.64.1/go.mod h1:RAro2j2yN9a9EiPACLHT9IB2NXCvGQmmo/alT0yYI0w=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
-github.com/sihuangtech/probelune-contracts v0.1.1 h1:vnl4IZC2CXVkQb9N8HnX9JRZubCMPGukHSlIdK/waSg=
+github.com/sihuangtech/probelune-contracts v0.1.1 h1:tUfqaEQHHBTru7KwD/v8QUmN/Alsu0ooQUEZr3eTYJU=
 github.com/sihuangtech/probelune-contracts v0.1.1/go.mod h1:989NbGOZBqbmh2uRvhDPigZXknP+FXWPT3qyhcGc9ek=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
