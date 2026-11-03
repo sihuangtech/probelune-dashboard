@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { version } from "../../package.json"
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Monitor, Connection, Aim, Bell, Setting, Grid, Warning } from '@element-plus/icons-vue'
@@ -46,7 +47,7 @@ async function logout() {
         >
       </nav>
       <div class="sidebar-bottom">
-        <span class="status-dot" /> SELF-HOSTED <small>v0.1.0</small>
+        <span class="status-dot" /> SELF-HOSTED <small>v{{ version }}</small>
       </div>
     </aside>
     <div class="content-shell">

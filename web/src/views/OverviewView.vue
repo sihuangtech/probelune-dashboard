@@ -107,7 +107,7 @@ function latest(monitor: Monitor) {
           </div>
         </template></el-table-column
       >
-      <el-table-column :label="t('overview')" min-width="160"
+      <el-table-column :label="t('monitorStatus')" min-width="160"
         ><template #default="{ row }">
           <HealthPill :status="row.status" /><small v-if="!row.coverage_complete">
             {{ t('incomplete') }}</small

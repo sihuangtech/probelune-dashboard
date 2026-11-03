@@ -3,6 +3,9 @@ export const language = ref(
   localStorage.getItem('probelune-language') || (navigator.language.startsWith('zh') ? 'zh' : 'en'),
 )
 const messages: Record<string, [string, string]> = {
+  targetResults: ['检测结果', 'Check results'],
+  monitorStatus: ['状态', 'Status'],
+  allStatuses: ['全部状态', 'All statuses'],
   allTypes: ['全部类型', 'All types'],
   noTypeMonitors: ['此类型暂无匹配的监测', 'No matching monitors of this type'],
   filteredMonitors: ['当前筛选', 'Filtered monitors'],

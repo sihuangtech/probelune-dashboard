@@ -55,6 +55,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
     <div class="toolbar">
       <el-input v-model="search" :placeholder="t('search')" clearable /><el-select
         v-model="filter"
+        :placeholder="t('allStatuses')"
         clearable
         style="max-width: 180px"
         ><el-option
@@ -85,7 +86,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
             >
           </div></template
         ></el-table-column
-      ><el-table-column :label="t('overview')" width="190"
+      ><el-table-column :label="t('monitorStatus')" width="190"
         ><template #default="{ row }"
           ><HealthPill :status="row.status" /><small v-if="!row.coverage_complete">
             {{ t('incomplete') }}</small
@@ -95,7 +96,7 @@ async function change(m: Monitor, key: 'enabled' | 'archived') {
         :label="t('interval')"
         width="120"
         ><template #default="{ row }">{{ row.interval }}s</template></el-table-column
-      ><el-table-column v-if="canEdit" width="230"
+      ><el-table-column v-if="canEdit" width="300"
         ><template #default="{ row }"
           ><div class="actions">
             <el-button size="small" @click="edit(row)">{{ t('edit') }}</el-button
