@@ -16,7 +16,7 @@ RUN go mod download
 COPY server/ ./
 RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/probelune-dashboard ./cmd/server
 
-FROM alpine:3.24.3
+FROM alpine:3.24.4
 RUN apk add --no-cache ca-certificates tzdata \
     && addgroup -S -g 65532 probelune && adduser -S -u 65532 -G probelune probelune \
     && mkdir /data && chown 65532:65532 /data
