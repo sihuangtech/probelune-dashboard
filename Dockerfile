@@ -8,7 +8,7 @@ COPY web/ ./
 RUN npm run build
 RUN node -p 'require("./package.json").version' > /tmp/dashboard-version
 
-FROM golang:1.27.3-alpine3.24 AS server
+FROM golang:1.27.4-alpine3.24 AS server
 WORKDIR /src/server
 ENV GONOPROXY=github.com/sihuangtech/probelune-contracts GONOSUMDB=github.com/sihuangtech/probelune-contracts
 RUN apk add --no-cache git ca-certificates
