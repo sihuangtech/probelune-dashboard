@@ -19,6 +19,9 @@ import (
 	"time"
 )
 
+// version 由发布构建注入，直接运行源码时显示 dev。
+var version = "dev"
+
 type Server struct {
 	Store           *store.Store
 	Dir             string
@@ -160,7 +163,7 @@ func (s *Server) Router(web string) *gin.Engine {
 		}
 		c.Next()
 	})
-	r.GET("/healthz", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok", "version": "0.1.2"}) })
+	r.GET("/healthz", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok", "version": version}) })
 	s.authRoutes(r)
 	s.nodeRoutes(r)
 	v := r.Group("/api/v1", s.authenticate)

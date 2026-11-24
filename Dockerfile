@@ -6,6 +6,7 @@ COPY web/.npmrc ./
 RUN npm ci
 COPY web/ ./
 RUN npm run build
+RUN node -p 'require("./package.json").version' > /tmp/dashboard-version
 
 FROM golang:1.27.3-alpine3.24 AS server
 WORKDIR /src/server
@@ -14,7 +15,9 @@ RUN apk add --no-cache git ca-certificates
 COPY server/go.mod server/go.sum ./
 RUN go mod download
 COPY server/ ./
-RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/probelune-dashboard ./cmd/server
+COPY --from=web /tmp/dashboard-version /tmp/dashboard-version
+RUN version=$(cat /tmp/dashboard-version) \
+    && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -X github.com/sihuangtech/probelune-dashboard/server/internal/api.version=$version" -o /out/probelune-dashboard ./cmd/server
 
 FROM alpine:3.24.4
 RUN apk add --no-cache ca-certificates tzdata \

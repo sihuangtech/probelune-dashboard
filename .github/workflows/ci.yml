@@ -32,8 +32,10 @@ jobs:
           test -z "$(gofmt -l cmd internal)"
           go vet ./...
           go test ./...
-          GOOS=linux GOARCH=amd64 go build -trimpath -o ../dist/probelune-dashboard-linux-amd64 ./cmd/server
-          GOOS=linux GOARCH=arm64 go build -trimpath -o ../dist/probelune-dashboard-linux-arm64 ./cmd/server
+          version=$(node -p 'require("../web/package.json").version')
+          version_flag="-X github.com/sihuangtech/probelune-dashboard/server/internal/api.version=$version"
+          GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="$version_flag" -o ../dist/probelune-dashboard-linux-amd64 ./cmd/server
+          GOOS=linux GOARCH=arm64 go build -trimpath -ldflags="$version_flag" -o ../dist/probelune-dashboard-linux-arm64 ./cmd/server
       - uses: actions/upload-artifact@v7.0.2
         with:
           name: dashboard-build
