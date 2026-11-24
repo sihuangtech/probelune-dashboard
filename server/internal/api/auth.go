@@ -102,10 +102,7 @@ func (s *Server) cookie(c *gin.Context, token string, age int) {
 }
 func (s *Server) issue(c *gin.Context, u model.User) {
 	token := s.DemoTokenPrefix + ID()
-	age := 8 * 3600
-	if c.FullPath() == "/api/v1/auth/pair/exchange" || strings.HasPrefix(c.GetHeader("User-Agent"), "Probelune Mobile/") {
-		age = 30 * 86400
-	}
+	const age = 180 * 86400
 	session := model.Session{ID: Hash(token), UserID: u.ID, Expires: Now() + int64(age), Device: c.GetHeader("User-Agent")}
 	if len(session.Device) > 200 {
 		session.Device = session.Device[:200]
